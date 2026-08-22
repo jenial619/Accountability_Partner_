@@ -1,0 +1,304 @@
+.register-page {
+  min-height: 100vh;
+  display: flex;
+  background: #fff8ef;
+}
+
+
+/* =========================
+   LEFT SIDE
+========================= */
+
+.register-left {
+  width: 50%;
+  min-height: 100vh;
+  padding: 45px 7%;
+  background: #f5d5c1;
+  color: #422d27;
+  position: relative;
+  overflow: hidden;
+}
+
+
+.register-left::after {
+  content: "";
+  position: absolute;
+  width: 430px;
+  height: 430px;
+  border-radius: 50%;
+  background: #efc3aa;
+  right: -160px;
+  bottom: -150px;
+}
+
+
+.register-logo {
+  display: inline-flex;
+  align-items: center;
+  color: #422d27;
+  font-size: 23px;
+  font-weight: 700;
+  position: relative;
+  z-index: 2;
+}
+
+
+.register-logo-icon {
+  width: 30px;
+  height: 30px;
+  border-radius: 50%;
+  background: #c9603e;
+  color: white;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-right: 9px;
+  font-size: 14px;
+}
+
+
+.register-left-content {
+  max-width: 520px;
+  margin-top: 130px;
+  position: relative;
+  z-index: 2;
+}
+
+
+.register-tag {
+  display: inline-block;
+  padding: 8px 14px;
+  background: #f9e5d8;
+  color: #b55335;
+  border-radius: 30px;
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 1px;
+  margin-bottom: 25px;
+}
+
+
+.register-left h1 {
+  font-size: clamp(43px, 5vw, 65px);
+  line-height: 1.05;
+  letter-spacing: -2px;
+  margin-bottom: 25px;
+}
+
+
+.register-left h1 span {
+  color: #c65d3b;
+  font-family: "Playfair Display", serif;
+  font-style: italic;
+}
+
+
+.register-left-content > p {
+  max-width: 450px;
+  color: #76594f;
+  line-height: 1.7;
+  font-size: 16px;
+}
+
+
+.register-benefits {
+  margin-top: 40px;
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+}
+
+
+.register-benefits div {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  color: #634940;
+  font-size: 14px;
+}
+
+
+.register-benefits span {
+  width: 23px;
+  height: 23px;
+  border-radius: 50%;
+  background: #c9603e;
+  color: white;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 12px;
+}
+
+
+/* =========================
+   RIGHT SIDE
+========================= */
+
+.register-right {
+  width: 50%;
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 40px;
+}
+
+
+.register-card {
+  width: 100%;
+  max-width: 440px;
+}
+
+
+.register-heading {
+  margin-bottom: 30px;
+}
+
+
+.register-heading h2 {
+  color: #3e2b25;
+  font-size: 32px;
+  margin-bottom: 9px;
+}
+
+
+.register-heading p {
+  color: #876e64;
+  font-size: 14px;
+}
+
+
+/* =========================
+   FORM
+========================= */
+
+.register-card .form-group {
+  margin-bottom: 17px;
+}
+
+
+.register-card .form-group label {
+  display: block;
+  color: #4c352d;
+  font-size: 13px;
+  font-weight: 600;
+  margin-bottom: 7px;
+}
+
+
+.register-card .form-group input {
+  width: 100%;
+  height: 48px;
+  padding: 0 15px;
+  border: 1px solid #e5d3c7;
+  border-radius: 8px;
+  background: #fffdf9;
+  color: #3e2b25;
+  font-family: inherit;
+  font-size: 14px;
+  outline: none;
+  transition: 0.2s;
+}
+
+
+.register-card .form-group input::placeholder {
+  color: #b19a91;
+}
+
+
+.register-card .form-group input:focus {
+  border-color: #c9603e;
+  box-shadow: 0 0 0 3px rgba(201, 96, 62, 0.1);
+}
+
+
+.register-submit {
+  width: 100%;
+  height: 50px;
+  margin-top: 8px;
+  border: none;
+  border-radius: 8px;
+  background: #c9603e;
+  color: white;
+  font-family: inherit;
+  font-size: 14px;
+  font-weight: 700;
+  cursor: pointer;
+  transition: 0.3s;
+}
+
+
+.register-submit:hover {
+  background: #a94b30;
+  transform: translateY(-1px);
+}
+
+
+/* =========================
+   LINKS
+========================= */
+
+.register-divider {
+  text-align: center;
+  margin: 25px 0 15px;
+  color: #9a7d72;
+  font-size: 12px;
+}
+
+
+.register-login {
+  text-align: center;
+}
+
+
+.register-login a {
+  color: #c9603e;
+  font-size: 13px;
+  font-weight: 700;
+}
+
+
+.register-back {
+  display: block;
+  text-align: center;
+  margin-top: 25px;
+  color: #9a7d72;
+  font-size: 12px;
+}
+
+
+.register-back:hover {
+  color: #c9603e;
+}
+
+
+/* =========================
+   RESPONSIVE
+========================= */
+
+@media (max-width: 900px) {
+
+  .register-left {
+    display: none;
+  }
+
+  .register-right {
+    width: 100%;
+    padding: 30px;
+  }
+
+}
+
+
+@media (max-width: 480px) {
+
+  .register-right {
+    padding: 25px 20px;
+  }
+
+  .register-heading h2 {
+    font-size: 28px;
+  }
+
+}
