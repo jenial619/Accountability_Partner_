@@ -255,7 +255,7 @@ function LandingPage() {
       <footer>
 
         <div className="footer-logo">
-          Accountability<span>Partner</span>
+          Saa<span>thi</span>
         </div>
 
         <p>
@@ -269,7 +269,7 @@ function LandingPage() {
         </div>
 
         <div className="copyright">
-          © 2026 Accountability Partner. All rights reserved.
+          © 2026 Saathi. All rights reserved.
         </div>
 
       </footer>
