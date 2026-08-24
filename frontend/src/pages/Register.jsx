@@ -29,15 +29,12 @@ function Register() {
 
     console.log("Registration data:", formData);
 
-    // Temporary navigation
-    // Later this will call your FastAPI registration API
     navigate("/dashboard");
   };
 
   return (
     <div className="register-page">
 
-      {/* Left Side */}
       <div className="register-left">
 
         <Link to="/" className="register-logo">
@@ -88,7 +85,6 @@ function Register() {
       </div>
 
 
-      {/* Right Side */}
       <div className="register-right">
 
         <div className="register-card">

@@ -2,8 +2,6 @@ import { Link } from "react-router-dom";
 import "./Dashboard.css";
 
 function Dashboard() {
-  // Temporary data
-  // Later this will come from your FastAPI backend
 
   const goals = [
     {
@@ -38,9 +36,6 @@ function Dashboard() {
   return (
     <div className="dashboard-page">
 
-      {/* 
-     SIDEBAR
-       */}
 
       <aside className="dashboard-sidebar">
 
@@ -94,13 +89,9 @@ function Dashboard() {
       </aside>
 
 
-      {/* 
-      MAIN CONTENT
-      */}
 
       <main className="dashboard-main">
 
-        {/* Header */}
 
         <header className="dashboard-header">
 
@@ -135,9 +126,6 @@ function Dashboard() {
         </header>
 
 
-        {/* 
-        TOP STATS
-        */}
 
         <section className="dashboard-stats">
 
@@ -199,16 +187,10 @@ function Dashboard() {
         </section>
 
 
-        {/* 
-        DASHBOARD GRID
-         */}
 
         <div className="dashboard-grid">
 
 
-          {/* 
-          MY GOALS
-           */}
 
           <section className="goals-section">
 
@@ -291,9 +273,6 @@ function Dashboard() {
           </section>
 
 
-          {/* =====================
-              ACCOUNTABILITY PARTNER
-          ===================== */}
 
           <section className="partner-section">
 
@@ -368,7 +347,6 @@ function Dashboard() {
             </div>
 
 
-            {/* Motivation Card */}
 
             <div className="motivation-card">
 
@@ -392,9 +370,6 @@ function Dashboard() {
         </div>
 
 
-        {/*
-        TODAY'S TASKS
-         */}
 
         <section className="today-section">
 

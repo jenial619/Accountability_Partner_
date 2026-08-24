@@ -22,15 +22,12 @@ function Login() {
 
     console.log("Login data:", formData);
 
-    // Temporary navigation
-    // Later this will call your FastAPI login API
     navigate("/dashboard");
   };
 
   return (
     <div className="auth-page">
 
-      {/* Left Side */}
       <div className="auth-left">
 
         <Link to="/" className="auth-logo">
@@ -66,7 +63,6 @@ function Login() {
       </div>
 
 
-      {/* Right Side */}
       <div className="auth-right">
 
         <div className="auth-card">
