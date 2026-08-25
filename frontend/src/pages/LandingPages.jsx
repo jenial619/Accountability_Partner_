@@ -124,7 +124,7 @@ function LandingPage() {
       <section className="features-section" id="features">
 
         <div className="section-heading">
-          <span>WHY ACCOUNTABILITY PARTNER?</span>
+          <span>WHY SAATHI?</span>
 
           <h2>
             Small steps become
