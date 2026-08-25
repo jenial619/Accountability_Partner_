@@ -2,9 +2,6 @@ import { Link } from "react-router-dom";
 import "./Dashboard.css";
 
 function Dashboard() {
-  // Temporary data
-  // Later this will come from your FastAPI backend
-
   const goals = [
     {
       id: 1,
@@ -14,15 +11,17 @@ function Dashboard() {
       completed: "3/4",
       deadline: "Aug 28",
       icon: "💻",
+      iconClass: "purple",
     },
     {
       id: 2,
       title: "Project Work",
       description: "Work on Accountability Partner",
       progress: 60,
-      completed: "3/5",
-      deadline: "Sep 05",
-      icon: "🚀",
+      completed: "6/10",
+      deadline: "Sep 10",
+      icon: "📁",
+      iconClass: "orange",
     },
     {
       id: 3,
@@ -32,82 +31,84 @@ function Dashboard() {
       completed: "8/20",
       deadline: "Sep 15",
       icon: "📚",
+      iconClass: "green",
     },
   ];
 
   return (
     <div className="dashboard-page">
 
-      {/* 
-     SIDEBAR
-       */}
+      {/* =====================================================
+          SIDEBAR
+      ===================================================== */}
 
-      <aside className="dashboard-sidebar">
+      <aside className="sidebar">
 
-        <Link to="/" className="dashboard-logo">
-          <span className="dashboard-logo-icon">◉</span>
-          Saathi
+        {/* Logo */}
+       {/* <Link to="/" className="logo">
+        <span className="logo-icon">◉</span>
+        Saa<span>thi</span>
+          </Link>*/}
+        <Link to="/" className="sidebar-logo">
+          <span className="sidebar-logo-icon">◉</span>
+          <span>Saathi</span>
         </Link>
 
-
+        {/* Navigation */}
         <nav className="sidebar-nav">
 
-          <Link to="/dashboard" className="sidebar-link active">
-            <span>⌂</span>
+          <Link to="/dashboard" className="active">
+            <span className="sidebar-nav-icon">⌂</span>
             Dashboard
           </Link>
 
-          <Link to="/goals" className="sidebar-link">
-            <span>🎯</span>
+          <Link to="/goals">
+            <span className="sidebar-nav-icon">🎯</span>
             My Goals
           </Link>
 
-          <Link to="/partners" className="sidebar-link">
-            <span>🤝</span>
+          <Link to="/partners">
+            <span className="sidebar-nav-icon">👥</span>
             My Partner
           </Link>
 
-          <Link to="/profile" className="sidebar-link">
-            <span>👤</span>
+          <Link to="/profile">
+            <span className="sidebar-nav-icon">👤</span>
             Profile
           </Link>
 
         </nav>
 
-
-        <div className="sidebar-bottom">
-
-          <div className="sidebar-tip">
-            <span>✨</span>
-            <p>
-              Small progress is still progress.
-            </p>
-          </div>
-
-          <Link to="/" className="logout-link">
-            <span>↪</span>
-            Logout
-          </Link>
-
+        {/* Bottom Sidebar */}
+        <div className="sidebar-message">
+          <span className="star">⭐</span>
+          <p>Small progress is still progress.</p>
         </div>
+
+        <Link to="/" className="sidebar-logout">
+          <span>↪</span>
+          Logout
+        </Link>
 
       </aside>
 
 
-      {/* 
-      MAIN CONTENT
-      */}
+      {/* =====================================================
+          MAIN CONTENT
+      ===================================================== */}
 
       <main className="dashboard-main">
 
-        {/* Header */}
+        {/* =================================================
+            HEADER
+        ================================================= */}
 
         <header className="dashboard-header">
 
           <div>
-            <p className="dashboard-date">
+            <div className="dashboard-date">
               Friday, August 21, 2026
-            </p>
+            </div>
 
             <h1>
               Good evening, Sarah! 👋
@@ -118,15 +119,13 @@ function Dashboard() {
             </p>
           </div>
 
+          <div className="dashboard-header-actions">
 
-          <div className="header-profile">
-
-            <div className="notification">
+            <button className="notification-btn">
               🔔
-              <span></span>
-            </div>
+            </button>
 
-            <div className="profile-avatar">
+            <div className="profile-circle">
               S
             </div>
 
@@ -135,63 +134,111 @@ function Dashboard() {
         </header>
 
 
-        {/* 
-        TOP STATS
-        */}
+        {/* =================================================
+            TOP STAT CARDS
+        ================================================= */}
 
-        <section className="dashboard-stats">
+        <section className="stats-grid">
 
+          {/* Active Goals */}
           <div className="stat-card">
 
-            <div className="stat-icon orange">
+            <div className="stat-icon goal">
               🎯
             </div>
 
             <div>
-              <p>Active Goals</p>
-              <h2>3</h2>
+              <div className="stat-label">
+                Active Goals
+              </div>
+
+              <div className="stat-value">
+                3
+              </div>
             </div>
 
           </div>
 
 
+          {/* Completed Today */}
           <div className="stat-card">
 
-            <div className="stat-icon green">
+            <div className="stat-icon completed">
               ✓
             </div>
 
             <div>
-              <p>Completed Today</p>
-              <h2>5</h2>
+              <div className="stat-label">
+                Completed
+                <br />
+                Today
+              </div>
+
+              <div className="stat-value green">
+                5
+              </div>
             </div>
 
           </div>
 
 
+          {/* Current Streak */}
           <div className="stat-card">
 
-            <div className="stat-icon purple">
+            <div className="stat-icon streak">
               🔥
             </div>
 
             <div>
-              <p>Current Streak</p>
-              <h2>7 days</h2>
+              <div className="stat-label">
+                Current Streak
+              </div>
+
+              <div className="stat-value orange">
+                7 days
+              </div>
             </div>
 
           </div>
 
 
+          {/* Overall Progress */}
           <div className="stat-card">
 
-            <div className="stat-icon brown">
+            <div className="stat-icon progress">
               📈
             </div>
 
             <div>
-              <p>Overall Progress</p>
-              <h2>68%</h2>
+              <div className="stat-label">
+                Overall Progress
+              </div>
+
+              <div className="stat-value purple">
+                68%
+              </div>
+            </div>
+
+          </div>
+
+
+          {/* Focus Time */}
+          <div className="stat-card">
+
+            <div className="stat-icon focus">
+              🕒
+            </div>
+
+            <div>
+              <div className="stat-label">
+                Focus Time
+                <br />
+                Today
+              </div>
+
+              <div className="stat-value blue">
+                2.5 hrs
+              </div>
             </div>
 
           </div>
@@ -199,190 +246,533 @@ function Dashboard() {
         </section>
 
 
-        {/* 
-        DASHBOARD GRID
-         */}
+        {/* =================================================
+            UPPER DASHBOARD
+            MY GOALS | MY PARTNER
+                     | WEEKLY OVERVIEW
+        ================================================= */}
 
-        <div className="dashboard-grid">
+        <div className="dashboard-upper">
 
+          {/* =================================================
+              MY GOALS
+          ================================================= */}
 
-          {/* 
-          MY GOALS
-           */}
+          <section className="dashboard-card goals-card">
 
-          <section className="goals-section">
+            <div className="card-header">
 
-            <div className="section-header">
-
-              <div>
-                <span>YOUR PROGRESS</span>
-                <h2>My Goals</h2>
+              <div className="card-title">
+                My Goals
               </div>
 
-              <Link to="/goals">
+              <Link
+                to="/goals"
+                className="card-view"
+              >
                 View all →
               </Link>
 
             </div>
 
 
-            <div className="goal-list">
+            {/* Goal 1 */}
+            <div className="goal-item">
 
-              {goals.map((goal) => (
+              <div className="goal-top">
 
-                <div className="dashboard-goal-card" key={goal.id}>
+                <div className="goal-icon purple">
+                  💻
+                </div>
 
-                  <div className="goal-icon">
-                    {goal.icon}
+                <div className="goal-info">
+
+                  <div className="goal-name">
+                    DSA Practice
                   </div>
 
-
-                  <div className="goal-information">
-
-                    <div className="goal-title-row">
-
-                      <div>
-                        <h3>{goal.title}</h3>
-                        <p>{goal.description}</p>
-                      </div>
-
-                      <strong>
-                        {goal.progress}%
-                      </strong>
-
-                    </div>
-
-
-                    <div className="dashboard-progress-bar">
-                      <div
-                        className="dashboard-progress"
-                        style={{
-                          width: `${goal.progress}%`,
-                        }}
-                      ></div>
-                    </div>
-
-
-                    <div className="goal-meta">
-
-                      <span>
-                        {goal.completed} completed
-                      </span>
-
-                      <span>
-                        Due {goal.deadline}
-                      </span>
-
-                    </div>
-
+                  <div className="goal-description">
+                    Solve coding problems
                   </div>
 
                 </div>
 
-              ))}
+                <div className="goal-percentage">
+                  75%
+                </div>
+
+              </div>
+
+              <div className="progress-bar">
+                <div
+                  className="progress-fill"
+                  style={{ width: "75%" }}
+                ></div>
+              </div>
+
+              <div className="progress-info">
+                <span>3/4 completed</span>
+                <span>Due Aug 28</span>
+              </div>
 
             </div>
 
 
-            <Link to="/goals" className="add-goal-btn">
+            {/* Goal 2 */}
+            <div className="goal-item">
+
+              <div className="goal-top">
+
+                <div className="goal-icon orange">
+                  📁
+                </div>
+
+                <div className="goal-info">
+
+                  <div className="goal-name">
+                    Project Work
+                  </div>
+
+                  <div className="goal-description">
+                    Work on Accountability Partner
+                  </div>
+
+                </div>
+
+                <div className="goal-percentage">
+                  60%
+                </div>
+
+              </div>
+
+              <div className="progress-bar">
+                <div
+                  className="progress-fill"
+                  style={{ width: "60%" }}
+                ></div>
+              </div>
+
+              <div className="progress-info">
+                <span>6/10 completed</span>
+                <span>Due Sep 10</span>
+              </div>
+
+            </div>
+
+
+            {/* Goal 3 */}
+            <div className="goal-item">
+
+              <div className="goal-top">
+
+                <div className="goal-icon green">
+                  📚
+                </div>
+
+                <div className="goal-info">
+
+                  <div className="goal-name">
+                    Read a Book
+                  </div>
+
+                  <div className="goal-description">
+                    Read 20 pages every day
+                  </div>
+
+                </div>
+
+                <div className="goal-percentage">
+                  40%
+                </div>
+
+              </div>
+
+              <div className="progress-bar">
+                <div
+                  className="progress-fill"
+                  style={{ width: "40%" }}
+                ></div>
+              </div>
+
+              <div className="progress-info">
+                <span>8/20 completed</span>
+                <span>Due Sep 15</span>
+              </div>
+
+            </div>
+
+
+            <Link
+              to="/goals"
+              className="create-goal-btn"
+            >
               + Create New Goal
             </Link>
 
           </section>
 
 
-          {/* =====================
-              ACCOUNTABILITY PARTNER
-          ===================== */}
+          {/* =================================================
+              PARTNER COLUMN
+          ================================================= */}
 
-          <section className="partner-section">
+          <div className="partner-column">
 
-            <div className="section-header">
+            {/* =================================================
+                MY PARTNER
+            ================================================= */}
 
-              <div>
-                <span>ACCOUNTABILITY</span>
-                <h2>My Partner</h2>
+            <section className="dashboard-card partner-card">
+
+              <div className="card-header">
+
+                <div className="card-title">
+                  My Partner
+                </div>
+
+                <Link
+                  to="/partners"
+                  className="card-view"
+                >
+                  View all →
+                </Link>
+
               </div>
 
-              <Link to="/partners">
-                View →
-              </Link>
+
+              <div className="partner-content">
+
+                {/* Partner Profile */}
+
+                <div className="partner-profile">
+
+                  <div className="partner-avatar">
+                    A
+                  </div>
+
+                  <div className="partner-info">
+
+                    <div className="partner-name">
+                      Alex Johnson
+                    </div>
+
+                    <div className="partner-role">
+                      Accountability Partner
+                    </div>
+
+                  </div>
+
+                  <div className="partner-online">
+
+                    <span className="online-dot"></span>
+
+                    Online
+
+                  </div>
+
+                </div>
+
+
+                {/* Message */}
+
+                <div className="partner-message">
+
+                  💬 &nbsp;
+                  "Let's complete our goals today!" 💪
+
+                </div>
+
+
+                {/* Partner Progress */}
+
+                <div className="partner-progress">
+
+                  <div className="partner-progress-header">
+
+                    <span>
+                      Alex's Progress
+                    </span>
+
+                    <strong>
+                      82%
+                    </strong>
+
+                  </div>
+
+                  <div className="progress-bar">
+
+                    <div
+                      className="progress-fill green"
+                      style={{ width: "82%" }}
+                    ></div>
+
+                  </div>
+
+                </div>
+
+              </div>
+
+            </section>
+
+
+            {/* =================================================
+                WEEKLY OVERVIEW
+            ================================================= */}
+
+            <section className="dashboard-card weekly-card">
+
+              <div className="card-header">
+
+                <div className="card-title">
+                  📅 &nbsp; Weekly Overview
+                </div>
+
+              </div>
+
+
+              <div className="weekly-content">
+
+                <div className="week-days">
+
+                  {/* Monday */}
+                  <div>
+                    <div className="week-day">
+                      Mon
+                    </div>
+
+                    <div className="week-status done">
+                      ✓
+                    </div>
+                  </div>
+
+
+                  {/* Tuesday */}
+                  <div>
+                    <div className="week-day">
+                      Tue
+                    </div>
+
+                    <div className="week-status done">
+                      ✓
+                    </div>
+                  </div>
+
+
+                  {/* Wednesday */}
+                  <div>
+                    <div className="week-day">
+                      Wed
+                    </div>
+
+                    <div className="week-status done">
+                      ✓
+                    </div>
+                  </div>
+
+
+                  {/* Thursday */}
+                  <div>
+                    <div className="week-day">
+                      Thu
+                    </div>
+
+                    <div className="week-status today">
+                    </div>
+
+                    <div className="today-label">
+                      Today
+                    </div>
+                  </div>
+
+
+                  {/* Friday */}
+                  <div>
+                    <div className="week-day">
+                      Fri
+                    </div>
+
+                    <div className="week-status today">
+                    </div>
+                  </div>
+
+
+                  {/* Saturday */}
+                  <div>
+                    <div className="week-day">
+                      Sat
+                    </div>
+
+                    <div className="week-status empty">
+                    </div>
+                  </div>
+
+
+                  {/* Sunday */}
+                  <div>
+                    <div className="week-day">
+                      Sun
+                    </div>
+
+                    <div className="week-status empty">
+                    </div>
+                  </div>
+
+                </div>
+
+              </div>
+
+            </section>
+
+          </div>
+
+        </div>
+
+
+        {/* =================================================
+            LOWER SECTION
+            TODAY'S TASKS | CURRENT STREAK
+        ================================================= */}
+
+        <div className="dashboard-lower">
+
+          {/* =================================================
+              TODAY'S TASKS
+          ================================================= */}
+
+          <section className="dashboard-card tasks-card">
+
+            <div className="card-header">
+
+              <div className="card-title">
+                ☷ &nbsp; Today's Tasks
+              </div>
+
+              <span className="card-view">
+                3 tasks remaining
+              </span>
 
             </div>
 
 
-            <div className="partner-card">
+            {/* Task 1 */}
 
-              <div className="partner-top">
+            <div className="task-row">
 
-                <div className="partner-avatar">
-                  A
+              <div className="task-check completed">
+                ✓
+              </div>
+
+              <div className="task-info">
+
+                <div className="task-name">
+                  Solve 2 DSA problems
                 </div>
 
-                <div>
-                  <h3>Alex Johnson</h3>
-                  <p>Accountability Partner</p>
-                </div>
-
-                <div className="online-status">
-                  <span></span>
-                  Online
+                <div className="task-category">
+                  DSA Practice
                 </div>
 
               </div>
 
-
-              <div className="partner-message">
-                <span>💬</span>
-
-                <p>
-                  "Let's complete our goals today!"
-                </p>
-              </div>
-
-
-              <div className="partner-progress">
-
-                <div className="partner-progress-header">
-                  <span>Alex's Progress</span>
-                  <strong>82%</strong>
-                </div>
-
-                <div className="dashboard-progress-bar">
-                  <div
-                    className="dashboard-progress partner-progress-fill"
-                    style={{ width: "82%" }}
-                  ></div>
-                </div>
-
-              </div>
-
-
-              <Link
-                to="/partners"
-                className="partner-button"
-              >
-                View Partner Progress
-              </Link>
+              <span className="task-status completed">
+                Completed
+              </span>
 
             </div>
 
 
-            {/* Motivation Card */}
+            {/* Task 2 */}
 
-            <div className="motivation-card">
+            <div className="task-row">
 
-              <div className="motivation-icon">
-                ✨
+              <div className="task-check">
               </div>
 
-              <div>
-                <span>KEEP GOING!</span>
+              <div className="task-info">
 
-                <p>
+                <div className="task-name">
+                  Work on React frontend
+                </div>
+
+                <div className="task-category">
+                  Project Work
+                </div>
+
+              </div>
+
+              <span className="task-status pending">
+                Pending
+              </span>
+
+            </div>
+
+
+            {/* Task 3 */}
+
+            <div className="task-row">
+
+              <div className="task-check">
+              </div>
+
+              <div className="task-info">
+
+                <div className="task-name">
+                  Read 20 pages
+                </div>
+
+                <div className="task-category">
+                  Read a Book
+                </div>
+
+              </div>
+
+              <span className="task-status pending">
+                Pending
+              </span>
+
+            </div>
+
+          </section>
+
+
+          {/* =================================================
+              CURRENT STREAK
+          ================================================= */}
+
+          <section className="dashboard-card streak-card">
+
+            <div className="card-header">
+
+              <div className="card-title">
+                🔥 &nbsp; Current Streak
+              </div>
+
+            </div>
+
+
+            <div className="streak-content">
+
+              <div>
+
+                <div className="streak-title">
+                  Keep going! 🔥
+                </div>
+
+                <div className="streak-description">
                   You're only 2 tasks away from
                   completing today's goals.
-                </p>
+                </div>
+
+              </div>
+
+
+              <div className="streak-ring">
+
+                <div className="streak-number">
+                  7
+                  <span>days</span>
+                </div>
+
               </div>
 
             </div>
@@ -392,82 +782,22 @@ function Dashboard() {
         </div>
 
 
-        {/*
-        TODAY'S TASKS
-         */}
+        {/* =================================================
+            MOTIVATIONAL BANNER
+        ================================================= */}
 
-        <section className="today-section">
+        <div className="motivation-banner">
 
-          <div className="section-header">
+          <span className="motivation-icon">
+            ☀️
+          </span>
 
-            <div>
-              <span>TODAY</span>
-              <h2>Today's Tasks</h2>
-            </div>
+          <span className="motivation-text">
+            Consistency is the key to success.
+            Keep showing up for yourself every day!
+          </span>
 
-            <span className="task-count">
-              3 tasks remaining
-            </span>
-
-          </div>
-
-
-          <div className="tasks-container">
-
-            <div className="task completed-task">
-
-              <div className="task-checkbox">
-                ✓
-              </div>
-
-              <div>
-                <h3>Solve 2 DSA problems</h3>
-                <p>DSA Practice</p>
-              </div>
-
-              <span className="task-completed">
-                Completed
-              </span>
-
-            </div>
-
-
-            <div className="task">
-
-              <div className="task-checkbox empty">
-              </div>
-
-              <div>
-                <h3>Work on React frontend</h3>
-                <p>Project Work</p>
-              </div>
-
-              <span className="task-pending">
-                Pending
-              </span>
-
-            </div>
-
-
-            <div className="task">
-
-              <div className="task-checkbox empty">
-              </div>
-
-              <div>
-                <h3>Read 20 pages</h3>
-                <p>Read a Book</p>
-              </div>
-
-              <span className="task-pending">
-                Pending
-              </span>
-
-            </div>
-
-          </div>
-
-        </section>
+        </div>
 
       </main>
 
