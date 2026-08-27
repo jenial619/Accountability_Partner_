@@ -4,6 +4,7 @@ import LandingPage from "./pages/LandingPages";
 import Login from "./pages/Login";
 import Register from "./pages/Register";
 import Dashboard from "./pages/Dashboard";
+import { Goals, Partners, Profile } from "./pages/WorkspacePages";
 
 function App() {
   return (
@@ -17,6 +18,9 @@ function App() {
         <Route path="/register" element={<Register />} />
 
         <Route path="/dashboard" element={<Dashboard />} />
+        <Route path="/goals" element={<Goals />} />
+        <Route path="/partners" element={<Partners />} />
+        <Route path="/profile" element={<Profile />} />
 
       </Routes>
     </BrowserRouter>
