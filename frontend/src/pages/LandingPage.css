@@ -26,9 +26,6 @@ a {
 }
 
 
-/* =========================
-   NAVBAR
-========================= */
 
 .navbar {
   height: 78px;
@@ -115,12 +112,9 @@ a {
 }
 
 
-/* =========================
-   HERO
-========================= */
 
 .hero {
-  min-height: 650px;
+  min-height: calc(100svh - 78px);
   padding: 75px 7%;
   display: flex;
   align-items: center;
@@ -228,9 +222,6 @@ a {
 }
 
 
-/* =========================
-   HERO VISUAL
-========================= */
 
 .hero-visual {
   width: 43%;
@@ -369,9 +360,6 @@ a {
 }
 
 
-/* =========================
-   FEATURES
-========================= */
 
 .features-section {
   padding: 100px 7%;
@@ -469,9 +457,6 @@ a {
 }
 
 
-/* =========================
-   HOW IT WORKS
-========================= */
 
 .how-section {
   padding: 100px 7%;
@@ -514,9 +499,6 @@ a {
 }
 
 
-/* =========================
-   CTA
-========================= */
 
 .cta-section {
   padding: 100px 7%;
@@ -569,21 +551,19 @@ a {
 }
 
 
-/* =========================
-   FOOTER
-========================= */
 
 footer {
   background: #30201c;
   color: #cdbbb4;
-  padding: 45px 7%;
+  width: 100%;
+  padding: 16px 7% 14px;
   text-align: center;
 }
 
 
 .footer-logo {
   color: white;
-  font-size: 20px;
+  font-size: 16px;
   font-weight: 700;
 }
 
@@ -594,33 +574,30 @@ footer {
 
 
 footer p {
-  font-size: 13px;
-  margin: 10px 0 25px;
+  font-size: 11px;
+  margin: 3px 0 8px;
 }
 
 
 .footer-links {
   display: flex;
   justify-content: center;
-  gap: 25px;
-  margin-bottom: 25px;
+  gap: 16px;
+  margin-bottom: 8px;
 }
 
 
 .footer-links a {
-  font-size: 13px;
+  font-size: 11px;
 }
 
 
 .copyright {
-  font-size: 11px;
+  font-size: 10px;
   color: #806b63;
 }
 
 
-/* =========================
-   RESPONSIVE
-========================= */
 
 @media (max-width: 900px) {
 
@@ -660,6 +637,10 @@ footer p {
 
 
 @media (max-width: 600px) {
+
+  footer {
+    padding: 16px 5% 14px;
+  }
 
   .navbar {
     padding: 0 5%;
