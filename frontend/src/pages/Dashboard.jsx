@@ -433,7 +433,8 @@ function Dashboard() {
         <aside className="sidebar">
 
           <div className="sidebar-logo">
-            Saathi
+             
+            ◉ Saathi
           </div>
 
           <nav className="sidebar-nav">
@@ -453,13 +454,6 @@ function Dashboard() {
                 🎯
               </span>
               My Goals
-            </Link>
-
-            <Link to="/create-goal">
-              <span className="sidebar-nav-icon">
-                ➕
-              </span>
-              Create Goal
             </Link>
 
             <Link to="/partners">
@@ -511,7 +505,7 @@ function Dashboard() {
       <aside className="sidebar">
 
         <div className="sidebar-logo">
-          Saathi
+          ◉ Saathi
         </div>
 
         <nav className="sidebar-nav">
@@ -521,7 +515,7 @@ function Dashboard() {
             className="active"
           >
             <span className="sidebar-nav-icon">
-              🏠
+              ⌂ 
             </span>
             Dashboard
           </Link>
@@ -531,13 +525,6 @@ function Dashboard() {
               🎯
             </span>
             My Goals
-          </Link>
-
-          <Link to="/create-goal">
-            <span className="sidebar-nav-icon">
-              ➕
-            </span>
-            Create Goal
           </Link>
 
           <Link to="/partners">
@@ -581,7 +568,7 @@ function Dashboard() {
           }}
         >
           <span>
-            🚪
+            ↪
           </span>
 
           Logout

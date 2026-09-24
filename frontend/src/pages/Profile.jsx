@@ -154,13 +154,10 @@ function Profile() {
           </Link>
 
           <Link to="/partners">
-            🤝 My Partner
+            🤝 My Partners
           </Link>
 
-          <Link
-            to="/profile"
-            className="active"
-          >
+          <Link to="/profile" className="active">
             👤 Profile
           </Link>
 

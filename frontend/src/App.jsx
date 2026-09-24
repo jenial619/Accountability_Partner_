@@ -41,10 +41,7 @@ function App() {
           path="/create-goal"
           element={<CreateGoal />}
         />
-        <Route
-          path="/edit-goal"
-          element={<EditGoal />}
-        />
+        <Route path="/edit-goal/:id" element={<EditGoal />} />
 
         <Route path="/goals" element={<GoalsPage />} />
       </Routes>
