@@ -1,0 +1,312 @@
+/* =========================================================
+   PARTNERS PAGE STYLES
+   Directly matching Partner.jsx classes
+========================================================= */
+
+body {
+  margin: 0;
+  padding: 0;
+  background-color: #fff8f5;
+}
+
+.partner-page {
+  min-height: 100vh;
+  width: 100%;
+  display: flex;
+  background-color: #fff8f5 !important;
+  color: #3e2b25;
+  font-family: "Segoe UI", Arial, sans-serif;
+  box-sizing: border-box;
+}
+
+.partner-page * {
+  box-sizing: border-box;
+}
+
+/* ---------------- SIDEBAR ---------------- */
+.partner-sidebar {
+  width: 240px;
+  min-width: 240px;
+  min-height: 100vh;
+  background-color: #533a35 !important;
+  color: #ffffff;
+  display: flex;
+  flex-direction: column;
+  padding: 30px 18px 24px;
+  position: fixed;
+  left: 0;
+  top: 0;
+  bottom: 0;
+  z-index: 10;
+}
+
+.partner-logo {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  color: #ffffff;
+  text-decoration: none;
+  font-size: 22px;
+  font-weight: 700;
+  padding: 0 12px;
+  margin-bottom: 50px;
+}
+
+.partner-logo span {
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  background: #d85f49;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #ffffff;
+  font-size: 15px;
+}
+
+.partner-sidebar nav {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  flex: 1;
+}
+
+.partner-sidebar nav a {
+  min-height: 52px;
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  padding: 0 16px;
+  border-radius: 10px;
+  color: #ffffff;
+  text-decoration: none;
+  font-size: 15px;
+  font-weight: 500;
+  transition: all 0.2s ease;
+}
+
+.partner-sidebar nav a:hover {
+  background: rgba(255, 255, 255, 0.08);
+}
+
+.partner-sidebar nav a.active {
+  background: #ff7043 !important;
+  color: #ffffff;
+  box-shadow: 0 6px 18px rgba(217, 87, 71, 0.25);
+}
+
+.partner-logout {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 10px 16px;
+  background: transparent;
+  border: none;
+  color: #ffffff;
+  font-size: 14px;
+  cursor: pointer;
+  margin-top: auto;
+  border-radius: 8px;
+}
+
+.partner-logout:hover {
+  background: rgba(255, 255, 255, 0.1);
+}
+
+/* ---------------- MAIN CONTENT ---------------- */
+.partner-main {
+  margin-left: 240px;
+  width: calc(100% - 240px);
+  min-height: 100vh;
+  padding: 48px 58px 55px;
+  background-color: #fff8f5 !important;
+}
+
+.partner-page-header {
+  margin-bottom: 35px;
+}
+
+.partner-page-header p {
+  margin: 0 0 10px;
+  color: #a8796d;
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 1.5px;
+  text-transform: uppercase;
+}
+
+.partner-page-header h1 {
+  margin: 0;
+  color: #30231f;
+  font-size: 34px;
+  font-weight: 600;
+}
+
+.partner-page-header span {
+  display: block;
+  margin-top: 8px;
+  color: #877a75;
+  font-size: 14px;
+}
+
+/* ---------------- CARDS ---------------- */
+.connected-partners-card,
+.find-partner-card,
+.partner-requests-card,
+.partner-profile-card,
+.partner-progress-card,
+.message-card {
+  width: 100%;
+  background: #fffefd !important;
+  border: 1px solid #ece5e1;
+  border-radius: 14px;
+  padding: 24px 28px;
+  margin-bottom: 24px;
+  box-shadow: 0 4px 18px rgba(61, 40, 31, 0.03);
+}
+
+.partner-section-title span {
+  display: block;
+  color: #a8796d;
+  font-size: 10px;
+  font-weight: 700;
+  letter-spacing: 1.5px;
+  text-transform: uppercase;
+  margin-bottom: 6px;
+}
+
+.partner-section-title h2 {
+  margin: 0 0 18px 0;
+  color: #332723;
+  font-size: 21px;
+  font-weight: 600;
+}
+
+/* ---------------- EMPTY STATE ---------------- */
+.partner-empty-goals,
+.partner-empty-state {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 32px 20px;
+  text-align: center;
+  background: #fff8f5;
+  border: 1px dashed #ece5e1;
+  border-radius: 12px;
+}
+
+.partner-empty-goals h3,
+.partner-empty-state h2 {
+  font-size: 15px;
+  font-weight: 600;
+  color: #342722;
+  margin: 0 0 6px 0;
+}
+
+.partner-empty-goals p {
+  font-size: 12px;
+  color: #9b908c;
+  margin: 0;
+}
+
+/* ---------------- FORM ---------------- */
+.find-partner-card p {
+  color: #837671;
+  font-size: 13px;
+  margin: 0 0 16px 0;
+}
+
+.find-partner-form {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px;
+}
+
+.find-partner-form select,
+.find-partner-form input {
+  flex: 1;
+  min-width: 200px;
+  height: 44px;
+  background: #ffffff;
+  border: 1px solid #ece5e1;
+  border-radius: 8px;
+  padding: 0 14px;
+  font-size: 13px;
+  color: #3e2b25;
+  outline: none;
+}
+
+.find-partner-form button {
+  height: 44px;
+  border: none;
+  border-radius: 8px;
+  background: #d96350;
+  color: #ffffff;
+  padding: 0 22px;
+  font-size: 13px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.find-partner-form button:hover:not(:disabled) {
+  background: #c95140;
+}
+
+/* ---------------- REQUESTS ---------------- */
+.partner-request {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 14px 18px;
+  background: #fff8f5;
+  border: 1px solid #ece5e1;
+  border-radius: 12px;
+  margin-bottom: 10px;
+}
+
+.request-avatar {
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  background: #ead0ca;
+  color: #5a3c36;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: 700;
+}
+
+.request-info {
+  flex: 1;
+  margin-left: 14px;
+  display: flex;
+  flex-direction: column;
+}
+
+.request-actions {
+  display: flex;
+  gap: 8px;
+}
+
+.accept-request-btn {
+  border: none;
+  border-radius: 7px;
+  background: #d96350;
+  color: #ffffff;
+  padding: 8px 16px;
+  font-size: 11px;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+.reject-request-btn {
+  border: 1px solid #ece5e1;
+  border-radius: 7px;
+  background: #fffefd;
+  color: #837671;
+  padding: 8px 14px;
+  font-size: 11px;
+  cursor: pointer;
+}
