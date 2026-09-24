@@ -1,0 +1,319 @@
+/* =========================================================
+   SAATHI THEME — CREATE GOAL PAGE
+   Matches Dashboard & My Goals Light Theme
+========================================================= */
+
+:root {
+  --bg-page: #f8fafc;
+  --bg-sidebar: #1e1b2e;
+  --bg-sidebar-hover: rgba(255, 255, 255, 0.08);
+  --bg-card: #ffffff;
+  
+  --text-main: #1e293b;
+  --text-muted: #64748b;
+  --text-subtle: #94a3b8;
+  --text-sidebar: #cbd5e1;
+  --text-sidebar-active: #ffffff;
+  
+  --coral-accent: #f97316;
+  --coral-hover: #ea580c;
+  --coral-light: #fff7ed;
+  --coral-border: #fed7aa;
+  
+  --border-light: #e2e8f0;
+  --border-focus: #f97316;
+  
+  --shadow-card: 0 4px 20px -2px rgba(0, 0, 0, 0.05), 0 2px 6px -1px rgba(0, 0, 0, 0.02);
+  --shadow-btn: 0 4px 12px rgba(249, 115, 22, 0.25);
+}
+
+/* Page Layout */
+.create-goal-page {
+  display: flex;
+  min-height: 100vh;
+  background-color: var(--bg-page);
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+  color: var(--text-main);
+  box-sizing: border-box;
+}
+
+/* =========================================================
+   SIDEBAR
+========================================================= */
+.create-sidebar {
+  width: 250px;
+  background-color: var(--bg-sidebar);
+  padding: 2rem 1.5rem;
+  display: flex;
+  flex-direction: column;
+  flex-shrink: 0;
+  box-sizing: border-box;
+}
+
+.create-logo {
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+  font-size: 1.35rem;
+  font-weight: 700;
+  color: #ffffff;
+  text-decoration: none;
+  margin-bottom: 2.5rem;
+  letter-spacing: -0.01em;
+}
+
+.create-logo span {
+  color: var(--coral-accent);
+  font-size: 1.15rem;
+}
+
+.create-sidebar nav {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.create-sidebar nav a {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  padding: 0.8rem 1.1rem;
+  border-radius: 0.75rem;
+  font-size: 0.95rem;
+  font-weight: 500;
+  color: var(--text-sidebar);
+  text-decoration: none;
+  transition: all 0.2s ease;
+}
+
+.create-sidebar nav a:hover {
+  background-color: var(--bg-sidebar-hover);
+  color: #ffffff;
+}
+
+.create-sidebar nav a.active {
+  background-color: var(--coral-accent);
+  color: var(--text-sidebar-active);
+  font-weight: 600;
+  box-shadow: 0 4px 12px rgba(249, 115, 22, 0.3);
+}
+
+/* =========================================================
+   MAIN CONTENT AREA
+========================================================= */
+.create-main {
+  flex: 1;
+  padding: 2.5rem 4rem;
+  overflow-y: auto;
+  max-width: 900px;
+  box-sizing: border-box;
+}
+
+/* Back Link */
+.back-link {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+  font-size: 0.9rem;
+  font-weight: 600;
+  color: var(--text-muted);
+  text-decoration: none;
+  margin-bottom: 1.75rem;
+  transition: color 0.15s ease, transform 0.15s ease;
+}
+
+.back-link:hover {
+  color: var(--coral-accent);
+  transform: translateX(-3px);
+}
+
+/* Header / Titles */
+.create-heading {
+  margin-bottom: 2rem;
+}
+
+.create-heading p {
+  font-size: 0.75rem;
+  font-weight: 700;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--coral-accent);
+  margin: 0 0 0.4rem 0;
+}
+
+.create-heading h1 {
+  font-size: 2.25rem;
+  font-weight: 700;
+  color: var(--text-main);
+  letter-spacing: -0.02em;
+  margin: 0 0 0.5rem 0;
+}
+
+.create-heading span {
+  font-size: 0.95rem;
+  color: var(--text-muted);
+}
+
+/* =========================================================
+   FORM CONTAINER & FIELDS
+========================================================= */
+.create-goal-form {
+  background: var(--bg-card);
+  border: 1px solid var(--border-light);
+  border-radius: 1.25rem;
+  padding: 2.5rem;
+  box-shadow: var(--shadow-card);
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+}
+
+.form-group {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.form-row {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 1.5rem;
+}
+
+.form-group label {
+  font-size: 0.88rem;
+  font-weight: 600;
+  color: var(--text-main);
+}
+
+.form-group input,
+.form-group textarea,
+.form-group select {
+  width: 100%;
+  background-color: #ffffff;
+  border: 1.5px solid var(--border-light);
+  border-radius: 0.75rem;
+  padding: 0.8rem 1rem;
+  font-size: 0.95rem;
+  color: var(--text-main);
+  font-family: inherit;
+  outline: none;
+  box-sizing: border-box;
+  transition: border-color 0.2s ease, box-shadow 0.2s ease;
+}
+
+.form-group input::placeholder,
+.form-group textarea::placeholder {
+  color: var(--text-subtle);
+}
+
+.form-group input:focus,
+.form-group textarea:focus,
+.form-group select:focus {
+  border-color: var(--border-focus);
+  box-shadow: 0 0 0 3px rgba(249, 115, 22, 0.12);
+}
+
+.form-group textarea {
+  resize: vertical;
+  min-height: 100px;
+}
+
+.form-group select {
+  cursor: pointer;
+}
+
+/* Error Banner */
+.create-goal-error {
+  background-color: #fef2f2;
+  border: 1px solid #fecaca;
+  color: #dc2626;
+  padding: 0.85rem 1.1rem;
+  border-radius: 0.75rem;
+  font-size: 0.9rem;
+  margin: 0;
+}
+
+/* =========================================================
+   ACTION BUTTONS
+========================================================= */
+.form-actions {
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  gap: 1rem;
+  margin-top: 1rem;
+  padding-top: 1.5rem;
+  border-top: 1px solid var(--border-light);
+}
+
+.cancel-button {
+  text-decoration: none;
+  color: var(--text-muted);
+  font-weight: 600;
+  font-size: 0.92rem;
+  padding: 0.75rem 1.4rem;
+  border-radius: 0.75rem;
+  transition: all 0.15s ease;
+}
+
+.cancel-button:hover {
+  background-color: #f1f5f9;
+  color: var(--text-main);
+}
+
+.save-goal-button {
+  background: linear-gradient(135deg, var(--coral-accent) 0%, var(--coral-hover) 100%);
+  color: #ffffff;
+  border: none;
+  border-radius: 0.75rem;
+  padding: 0.8rem 1.8rem;
+  font-size: 0.95rem;
+  font-weight: 600;
+  cursor: pointer;
+  box-shadow: var(--shadow-btn);
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  transition: transform 0.15s ease, box-shadow 0.15s ease, background 0.15s ease;
+}
+
+.save-goal-button:hover:not(:disabled) {
+  background: linear-gradient(135deg, var(--coral-hover) 0%, #c2410c 100%);
+  transform: translateY(-1px);
+  box-shadow: 0 6px 16px rgba(249, 115, 22, 0.35);
+}
+
+.save-goal-button:active:not(:disabled) {
+  transform: translateY(0);
+}
+
+.save-goal-button:disabled {
+  opacity: 0.65;
+  cursor: not-allowed;
+}
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
+  .create-goal-page {
+    flex-direction: column;
+  }
+
+  .create-sidebar {
+    width: 100%;
+    padding: 1.25rem;
+  }
+
+  .create-main {
+    padding: 1.5rem;
+  }
+
+  .form-row {
+    grid-template-columns: 1fr;
+    gap: 1rem;
+  }
+
+  .create-goal-form {
+    padding: 1.5rem;
+  }
+}
