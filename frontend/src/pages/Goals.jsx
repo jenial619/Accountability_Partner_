@@ -1,908 +1,222 @@
-import { Link, useNavigate } from "react-router-dom";
-import { useEffect, useState } from "react";
-import "./Goals.css";
-
-function Goals() {
-  const navigate = useNavigate();
-
-  const [goals, setGoals] = useState([]);
-  const [tasks, setTasks] = useState({});
-  const [loading, setLoading] = useState(true);
-  const [error, setError] = useState("");
-
-  // =========================================================
-  // FETCH GOALS + TASKS
-  // =========================================================
-
-  useEffect(() => {
-    const fetchGoalsAndTasks = async () => {
-      const token = localStorage.getItem("access_token");
-
-      if (!token) {
-        navigate("/login");
-        return;
-      }
-
-      try {
-        // Fetch goals
-        const goalsResponse = await fetch(
-          "http://127.0.0.1:8000/goals/",
-          {
-            method: "GET",
-            headers: {
-              Authorization: `Bearer ${token}`,
-            },
-          }
-        );
-
-        const goalsData = await goalsResponse.json();
-
-        if (!goalsResponse.ok) {
-          throw new Error(
-            goalsData.detail || "Failed to fetch goals"
-          );
-        }
-
-        setGoals(goalsData);
-
-        // Fetch tasks for every goal
-        const taskResults = await Promise.all(
-          goalsData.map(async (goal) => {
-            const response = await fetch(
-              `http://127.0.0.1:8000/tasks/${goal.id}`,
-              {
-                method: "GET",
-                headers: {
-                  Authorization: `Bearer ${token}`,
-                },
-              }
-            );
-
-            const data = await response.json();
-
-            if (!response.ok) {
-              throw new Error(
-                data.detail || "Failed to fetch tasks"
-              );
-            }
-
-            return {
-              goalId: goal.id,
-              tasks: data,
-            };
-          })
-        );
-
-        const taskMap = {};
-
-        taskResults.forEach((result) => {
-          taskMap[result.goalId] = result.tasks;
-        });
-
-        setTasks(taskMap);
-
-      } catch (err) {
-        console.error(
-          "Error fetching goals/tasks:",
-          err
-        );
-
-        if (err.message === "Failed to fetch") {
-          setError(
-            "Unable to connect to the server. Please make sure FastAPI is running."
-          );
-        } else {
-          setError(err.message);
-        }
-      } finally {
-        setLoading(false);
-      }
-    };
-
-    fetchGoalsAndTasks();
-  }, [navigate]);
-
-
-  // =========================================================
-  // LOGOUT
-  // =========================================================
-
-  const handleLogout = () => {
-    localStorage.removeItem("access_token");
-    navigate("/login");
-  };
-
-
-  // =========================================================
-  // EDIT GOAL
-  // =========================================================
-
-  const handleEdit = (goal) => {
-    navigate("/edit-goal", {
-      state: {
-        goal: goal,
-      },
-    });
-  };
-
-
-  // =========================================================
-  // DELETE GOAL
-  // =========================================================
-
-  const handleDelete = async (goalId) => {
-    const confirmDelete = window.confirm(
-      "Are you sure you want to delete this goal?"
-    );
-
-    if (!confirmDelete) {
-      return;
-    }
-
-    const token = localStorage.getItem("access_token");
-
-    if (!token) {
-      navigate("/login");
-      return;
-    }
-
-    try {
-      const response = await fetch(
-        `http://127.0.0.1:8000/goals/${goalId}`,
-        {
-          method: "DELETE",
-          headers: {
-            Authorization: `Bearer ${token}`,
-          },
-        }
-      );
-
-      const data = await response.json();
-
-      if (!response.ok) {
-        throw new Error(
-          data.detail || "Failed to delete goal"
-        );
-      }
-
-      setGoals((currentGoals) =>
-        currentGoals.filter(
-          (goal) => goal.id !== goalId
-        )
-      );
-
-      setTasks((currentTasks) => {
-        const updatedTasks = {
-          ...currentTasks,
-        };
-
-        delete updatedTasks[goalId];
-
-        return updatedTasks;
-      });
-
-    } catch (err) {
-      console.error("Delete goal error:", err);
-      setError(err.message);
-    }
-  };
-
-
-  // =========================================================
-  // UPDATE PROGRESS
-  // =========================================================
-
-  const handleProgressUpdate = async (goal) => {
-    const newProgress = window.prompt(
-      "Enter progress (0 - 100):",
-      goal.progress || 0
-    );
-
-    if (newProgress === null) {
-      return;
-    }
-
-    const progress = Number(newProgress);
-
-    if (
-      Number.isNaN(progress) ||
-      progress < 0 ||
-      progress > 100
-    ) {
-      alert("Please enter a number between 0 and 100.");
-      return;
-    }
-
-    const token = localStorage.getItem("access_token");
-
-    if (!token) {
-      navigate("/login");
-      return;
-    }
-
-    try {
-      const response = await fetch(
-        `http://127.0.0.1:8000/goals/${goal.id}`,
-        {
-          method: "PUT",
-          headers: {
-            "Content-Type": "application/json",
-            Authorization: `Bearer ${token}`,
-          },
-          body: JSON.stringify({
-            title: goal.title,
-            description: goal.description,
-            category: goal.category,
-            progress: progress,
-            deadline: goal.deadline,
-            tasks: goal.tasks,
-          }),
-        }
-      );
-
-      const data = await response.json();
-
-      if (!response.ok) {
-        throw new Error(
-          data.detail || "Failed to update progress"
-        );
-      }
-
-      setGoals((currentGoals) =>
-        currentGoals.map((currentGoal) =>
-          currentGoal.id === goal.id
-            ? data
-            : currentGoal
-        )
-      );
-
-    } catch (err) {
-      console.error(
-        "Progress update error:",
-        err
-      );
-
-      setError(err.message);
-    }
-  };
-
-
-  // =========================================================
-  // ADD TASK
-  // =========================================================
-
-  const handleAddTask = async (goalId) => {
-    const title = window.prompt(
-      "Enter task name:"
-    );
-
-    if (!title || !title.trim()) {
-      return;
-    }
-
-    const token = localStorage.getItem("access_token");
-
-    if (!token) {
-      navigate("/login");
-      return;
-    }
-
-    try {
-      const response = await fetch(
-        `http://127.0.0.1:8000/tasks/${goalId}?title=${encodeURIComponent(
-          title.trim()
-        )}`,
-        {
-          method: "POST",
-          headers: {
-            Authorization: `Bearer ${token}`,
-          },
-        }
-      );
-
-      const data = await response.json();
-
-      if (!response.ok) {
-        throw new Error(
-          data.detail || "Failed to add task"
-        );
-      }
-
-      setTasks((currentTasks) => ({
-        ...currentTasks,
-        [goalId]: [
-          ...(currentTasks[goalId] || []),
-          data,
-        ],
-      }));
-
-    } catch (err) {
-      console.error("Add task error:", err);
-      setError(err.message);
-    }
-  };
-
-
-  // =========================================================
-  // TOGGLE TASK
-  // =========================================================
-
-  const handleToggleTask = async (
-    goalId,
-    task
-  ) => {
-    const token = localStorage.getItem("access_token");
-
-    if (!token) {
-      navigate("/login");
-      return;
-    }
-
-    try {
-      const newCompleted =
-        !task.completed;
-
-      const response = await fetch(
-        `http://127.0.0.1:8000/tasks/${task.id}?completed=${newCompleted}`,
-        {
-          method: "PUT",
-          headers: {
-            Authorization: `Bearer ${token}`,
-          },
-        }
-      );
-
-      const data = await response.json();
-
-      if (!response.ok) {
-        throw new Error(
-          data.detail || "Failed to update task"
-        );
-      }
-
-      setTasks((currentTasks) => ({
-        ...currentTasks,
-        [goalId]: (
-          currentTasks[goalId] || []
-        ).map((currentTask) =>
-          currentTask.id === task.id
-            ? data
-            : currentTask
-        ),
-      }));
-
-    } catch (err) {
-      console.error(
-        "Update task error:",
-        err
-      );
-
-      setError(err.message);
-    }
-  };
-
-
-  // =========================================================
-  // DELETE TASK
-  // =========================================================
-
-  const handleDeleteTask = async (
-    goalId,
-    taskId
-  ) => {
-    const confirmDelete = window.confirm(
-      "Delete this task?"
-    );
-
-    if (!confirmDelete) {
-      return;
-    }
-
-    const token = localStorage.getItem("access_token");
-
-    if (!token) {
-      navigate("/login");
-      return;
-    }
-
-    try {
-      const response = await fetch(
-        `http://127.0.0.1:8000/tasks/${taskId}`,
-        {
-          method: "DELETE",
-          headers: {
-            Authorization: `Bearer ${token}`,
-          },
-        }
-      );
-
-      const data = await response.json();
-
-      if (!response.ok) {
-        throw new Error(
-          data.detail || "Failed to delete task"
-        );
-      }
-
-      setTasks((currentTasks) => ({
-        ...currentTasks,
-        [goalId]: (
-          currentTasks[goalId] || []
-        ).filter(
-          (task) => task.id !== taskId
-        ),
-      }));
-
-    } catch (err) {
-      console.error(
-        "Delete task error:",
-        err
-      );
-
-      setError(err.message);
-    }
-  };
-
-
-  // =========================================================
-  // SUMMARY CALCULATIONS
-  // =========================================================
-
-  const activeGoals = goals.length;
-
-  const overallProgress =
-    goals.length > 0
-      ? Math.round(
-          goals.reduce(
-            (total, goal) =>
-              total + (goal.progress || 0),
-            0
-          ) / goals.length
-        )
-      : 0;
-
-  const allTasks = Object.values(tasks).flat();
-
-  const completedTasks = allTasks.filter(
-    (task) => task.completed
-  ).length;
-
-
-  // =========================================================
-  // RENDER
-  // =========================================================
-
+import { Link } from "react-router-dom";
+import "./Dashboard.css";
+
+const goals = [
+  {
+    id: 1,
+    title: "DSA Practice",
+    category: "Learning",
+    description: "Solve 2 coding problems each day.",
+    progress: 75,
+    completed: "3/4",
+    due: "Aug 28",
+    priority: "High",
+    icon: "💻",
+    accent: "orange",
+  },
+  {
+    id: 2,
+    title: "Project Work",
+    category: "Build",
+    description: "Finish the accountability partner app flow.",
+    progress: 60,
+    completed: "3/5",
+    due: "Sep 05",
+    priority: "Medium",
+    icon: "🚀",
+    accent: "green",
+  },
+  {
+    id: 3,
+    title: "Read a Book",
+    category: "Personal Growth",
+    description: "Read 20 pages before bed every night.",
+    progress: 40,
+    completed: "8/20",
+    due: "Sep 15",
+    priority: "Low",
+    icon: "📚",
+    accent: "purple",
+  },
+];
+
+const weeklyGoals = [
+  "Finish the onboarding flow",
+  "Complete one deep-dive DSA session",
+  "Read 20 pages before sleep",
+];
+
+function GoalsPage() {
   return (
-    <div className="goals-page">
-
-      {/* =====================================================
-          SIDEBAR
-      ===================================================== */}
-
-      <aside className="goals-sidebar">
-
-        <Link
-          to="/"
-          className="goals-logo"
-        >
-          <span>◉</span>
+    <div className="dashboard-page goals-page">
+      <aside className="dashboard-sidebar">
+        <Link to="/" className="dashboard-logo">
+          <span className="dashboard-logo-icon">◉</span>
           Saathi
         </Link>
 
-
-        <nav className="goals-nav">
-
-          <Link to="/dashboard">
+        <nav className="sidebar-nav">
+          <Link to="/dashboard" className="sidebar-link">
             <span>⌂</span>
             Dashboard
           </Link>
 
-
-          <Link
-            to="/goals"
-            className="active"
-          >
+          <Link to="/goals" className="sidebar-link active">
             <span>🎯</span>
             My Goals
           </Link>
 
-
-          <Link to="/partners">
+          <Link to="/partners" className="sidebar-link">
             <span>🤝</span>
             My Partner
           </Link>
 
-
-          <Link to="/profile">
+          <Link to="/profile" className="sidebar-link">
             <span>👤</span>
             Profile
           </Link>
-
         </nav>
 
+        <div className="sidebar-bottom">
+          <div className="sidebar-tip">
+            <span>✨</span>
+            <p>Small progress is still progress.</p>
+          </div>
 
-        <button
-          className="goals-logout"
-          onClick={handleLogout}
-        >
-          ↪ Logout
-        </button>
-
+          <Link to="/" className="logout-link">
+            <span>↪</span>
+            Logout
+          </Link>
+        </div>
       </aside>
 
-
-      {/* =====================================================
-          MAIN CONTENT
-      ===================================================== */}
-
-      <main className="goals-main">
-
-        {/* HEADER */}
-
-        <header className="goals-header">
-
+      <main className="dashboard-main goals-main">
+        <header className="dashboard-header">
           <div>
-
-            <p>YOUR JOURNEY</p>
-
+            <p className="dashboard-date">Monday, August 24, 2026</p>
             <h1>My Goals</h1>
-
-            <span>
-              Stay focused, stay consistent and keep moving forward.
-            </span>
-
+            <p className="dashboard-subtitle">
+              Stay focused and keep moving toward your biggest priorities.
+            </p>
           </div>
 
+          <div className="header-profile">
+            <div className="notification">
+              🔔
+              <span></span>
+            </div>
 
-          <Link
-            to="/create-goal"
-            className="create-goal-button"
-          >
-            + Create Goal
-          </Link>
-
+            <div className="profile-avatar">S</div>
+          </div>
         </header>
 
-
-        {/* ===================================================
-            SUMMARY
-        =================================================== */}
-
-        <div className="goal-summary">
-
-          <div>
-            <strong>
-              {activeGoals}
-            </strong>
-
-            <span>
-              Active Goals
-            </span>
+        <section className="goals-summary">
+          <div className="goal-summary-card orange-card">
+            <span>Total Goals</span>
+            <strong>3</strong>
+            <small>2 in progress</small>
           </div>
 
-
-          <div>
-            <strong>
-              {completedTasks}
-            </strong>
-
-            <span>
-              Completed Tasks
-            </span>
+          <div className="goal-summary-card green-card">
+            <span>Completed</span>
+            <strong>1</strong>
+            <small>Nice momentum</small>
           </div>
 
-
-          <div>
-            <strong>
-              {overallProgress}%
-            </strong>
-
-            <span>
-              Overall Progress
-            </span>
+          <div className="goal-summary-card purple-card">
+            <span>Focus Score</span>
+            <strong>82%</strong>
+            <small>Above average</small>
           </div>
-
-
-          <div>
-            <strong>
-              0 🔥
-            </strong>
-
-            <span>
-              Day Streak
-            </span>
-          </div>
-
-        </div>
-
-
-        {/* ===================================================
-            GOALS LIST
-        =================================================== */}
-
-        <section className="goals-list">
-
-          {/* LOADING */}
-
-          {loading && (
-            <div className="goals-message">
-              Loading your goals...
-            </div>
-          )}
-
-
-          {/* ERROR */}
-
-          {!loading && error && (
-            <div className="goals-message goals-error">
-              {error}
-            </div>
-          )}
-
-
-          {/* NO GOALS */}
-
-          {!loading &&
-            !error &&
-            goals.length === 0 && (
-
-              <div className="goals-message">
-
-                <h2>
-                  No goals yet 🎯
-                </h2>
-
-                <p>
-                  Create your first goal and start your journey.
-                </p>
-
-                <Link
-                  to="/create-goal"
-                  className="create-goal-button"
-                >
-                  + Create Goal
-                </Link>
-
-              </div>
-
-            )}
-
-
-          {/* =================================================
-              REAL GOALS
-          ================================================= */}
-
-          {!loading &&
-            !error &&
-            goals.map((goal) => {
-
-              const goalTasks =
-                tasks[goal.id] || [];
-
-              return (
-
-                <div
-                  className="goal-card"
-                  key={goal.id}
-                >
-
-                  {/* GOAL ICON */}
-
-                  <div className="goal-icon">
-                    🎯
-                  </div>
-
-
-                  <div className="goal-content">
-
-                    {/* TOP SECTION */}
-
-                    <div className="goal-card-top">
-
-                      <div>
-
-                        <span className="goal-category">
-                          {goal.category || "Other"}
-                        </span>
-
-
-                        <h2>
-                          {goal.title}
-                        </h2>
-
-
-                        <p>
-                          {goal.description ||
-                            "No description provided."}
-                        </p>
-
-                      </div>
-
-
-                      <strong className="goal-percentage">
-                        {goal.progress || 0}%
-                      </strong>
-
-                    </div>
-
-
-                    {/* PROGRESS BAR */}
-
-                    <div className="goal-bar">
-
-                      <div
-                        style={{
-                          width: `${goal.progress || 0}%`,
-                        }}
-                      ></div>
-
-                    </div>
-
-
-                    {/* =================================================
-                        TASKS
-                    ================================================= */}
-
-                    <div className="goal-tasks">
-
-                      <div className="tasks-header">
-
-                        <h3>
-                          Tasks
-                        </h3>
-
-                        <button
-                          className="add-task-button"
-                          onClick={() =>
-                            handleAddTask(goal.id)
-                          }
-                        >
-                          + Add Task
-                        </button>
-
-                      </div>
-
-
-                      {goalTasks.length === 0 ? (
-
-                        <p className="no-tasks">
-                          No tasks yet. Add your first task.
-                        </p>
-
-                      ) : (
-
-                        <div className="task-list">
-
-                          {goalTasks.map((task) => (
-
-                            <div
-                              className="task-item"
-                              key={task.id}
-                            >
-
-                              <label>
-
-                                <input
-                                  type="checkbox"
-                                  checked={task.completed}
-                                  onChange={() =>
-                                    handleToggleTask(
-                                      goal.id,
-                                      task
-                                    )
-                                  }
-                                />
-
-                                <span
-                                  className={
-                                    task.completed
-                                      ? "task-completed"
-                                      : ""
-                                  }
-                                >
-                                  {task.title}
-                                </span>
-
-                              </label>
-
-
-                              <button
-                                className="delete-task-button"
-                                onClick={() =>
-                                  handleDeleteTask(
-                                    goal.id,
-                                    task.id
-                                  )
-                                }
-                              >
-                                🗑
-                              </button>
-
-                            </div>
-
-                          ))}
-
-                        </div>
-
-                      )}
-
-                    </div>
-
-
-                    {/* DETAILS + ACTIONS */}
-
-                    <div className="goal-details">
-
-                      <div className="goal-info">
-
-                        <span>
-                          ✓ {goal.tasks || "No target"}
-                        </span>
-
-
-                        <span>
-                          📅 Due{" "}
-                          {goal.deadline || "No deadline"}
-                        </span>
-
-                      </div>
-
-
-                      <div className="goal-actions">
-
-                        {/* EDIT */}
-
-                        <button
-                          className="edit-goal-button"
-                          onClick={() =>
-                            handleEdit(goal)
-                          }
-                        >
-                          ✏️ Edit
-                        </button>
-
-
-                        {/* PROGRESS */}
-
-                        <button
-                          className="progress-goal-button"
-                          onClick={() =>
-                            handleProgressUpdate(goal)
-                          }
-                        >
-                          📊 Progress
-                        </button>
-
-
-                        {/* DELETE */}
-
-                        <button
-                          className="delete-goal-button"
-                          onClick={() =>
-                            handleDelete(goal.id)
-                          }
-                        >
-                          🗑 Delete
-                        </button>
-
-                      </div>
-
-                    </div>
-
-                  </div>
-
-                </div>
-
-              );
-
-            })}
-
         </section>
 
-      </main>
+        <div className="goals-layout">
+          <section className="goals-board">
+            <div className="section-header">
+              <div>
+                <span>YOUR PROGRESS</span>
+                <h2>Goal Board</h2>
+              </div>
 
+              <Link to="/dashboard">Back to dashboard</Link>
+            </div>
+
+            <div className="goal-list goals-list">
+              {goals.map((goal) => (
+                <article className={`dashboard-goal-card goal-detail-card ${goal.accent}`} key={goal.id}>
+                  <div className="goal-icon">{goal.icon}</div>
+
+                  <div className="goal-information">
+                    <div className="goal-title-row">
+                      <div>
+                        <h3>{goal.title}</h3>
+                        <p>{goal.category}</p>
+                      </div>
+
+                      <span className={`priority-badge ${goal.priority.toLowerCase()}`}>
+                        {goal.priority}
+                      </span>
+                    </div>
+
+                    <p className="goal-description">{goal.description}</p>
+
+                    <div className="dashboard-progress-bar">
+                      <div
+                        className="dashboard-progress"
+                        style={{ width: `${goal.progress}%` }}
+                      ></div>
+                    </div>
+
+                    <div className="goal-meta">
+                      <span>{goal.completed} completed</span>
+                      <span>Due {goal.due}</span>
+                    </div>
+
+                    <div className="goal-actions">
+                      <button type="button" className="goal-action-btn">
+                        Update
+                      </button>
+                      <button type="button" className="goal-action-btn secondary">
+                        Mark done
+                      </button>
+                    </div>
+                  </div>
+                </article>
+              ))}
+            </div>
+
+            <button type="button" className="add-goal-btn full-width-btn">
+              + Create New Goal
+            </button>
+          </section>
+
+          <aside className="goals-side-panel">
+            <div className="panel-card focus-card">
+              <div className="panel-header">
+                <span>THIS WEEK</span>
+                <h3>Priority Focus</h3>
+              </div>
+
+              <ul className="focus-list">
+                {weeklyGoals.map((item) => (
+                  <li key={item}>{item}</li>
+                ))}
+              </ul>
+            </div>
+
+            <div className="panel-card streak-card">
+              <div className="streak-icon">🔥</div>
+              <div>
+                <span>CONSISTENCY</span>
+                <h3>7-day streak</h3>
+                <p>You are building momentum. Keep it going.</p>
+              </div>
+            </div>
+          </aside>
+        </div>
+      </main>
     </div>
   );
 }
 
-export default Goals;
+export default GoalsPage;

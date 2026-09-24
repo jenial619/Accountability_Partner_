@@ -4,6 +4,7 @@ import LandingPage from "./pages/LandingPages";
 import Login from "./pages/Login";
 import Register from "./pages/Register";
 import Dashboard from "./pages/Dashboard";
+import GoalsPage from "./pages/Goals";
 
 import Goals from "./pages/Goals";
 import Partner from "./pages/Partner";
@@ -26,7 +27,6 @@ function App() {
           path="/goals"
           element={<Goals />}
         />
-
         <Route
           path="/partners"
           element={<Partner />}
@@ -45,6 +45,8 @@ function App() {
           path="/edit-goal"
           element={<EditGoal />}
         />
+
+        <Route path="/goals" element={<GoalsPage />} />
       </Routes>
     </BrowserRouter>
   );
