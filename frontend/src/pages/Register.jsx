@@ -12,6 +12,10 @@ function Register() {
     confirmPassword: "",
   });
 
+  const [error, setError] = useState("");
+  const [success, setSuccess] = useState("");
+  const [loading, setLoading] = useState(false);
+
   const handleChange = (e) => {
     setFormData({
       ...formData,
@@ -19,31 +23,69 @@ function Register() {
     });
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
 
+    setError("");
+    setSuccess("");
+
     if (formData.password !== formData.confirmPassword) {
-      alert("Passwords do not match.");
+      setError("Passwords do not match.");
       return;
     }
 
-    console.log("Registration data:", formData);
+    setLoading(true);
 
-    navigate("/dashboard");
+    try {
+      const response = await fetch(
+        "http://127.0.0.1:8000/auth/register",
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({
+            name: formData.name,
+            email: formData.email,
+            password: formData.password,
+          }),
+        }
+      );
+
+      const data = await response.json();
+
+      if (!response.ok) {
+        throw new Error(data.detail || "Registration failed.");
+      }
+
+      setSuccess("Registration successful! Redirecting to login...");
+
+      setFormData({
+        name: "",
+        email: "",
+        password: "",
+        confirmPassword: "",
+      });
+
+      setTimeout(() => {
+        navigate("/login");
+      }, 1500);
+    } catch (error) {
+      setError(error.message);
+    } finally {
+      setLoading(false);
+    }
   };
 
   return (
     <div className="register-page">
-
       <div className="register-left">
-
         <Link to="/" className="register-logo">
           <span className="register-logo-icon">◉</span>
           Saathi
         </Link>
 
         <div className="register-left-content">
-
           <span className="register-tag">
             ✦ START YOUR JOURNEY
           </span>
@@ -62,7 +104,6 @@ function Register() {
           </p>
 
           <div className="register-benefits">
-
             <div>
               <span>✓</span>
               Set and track your goals
@@ -77,18 +118,12 @@ function Register() {
               <span>✓</span>
               Grow together
             </div>
-
           </div>
-
         </div>
-
       </div>
 
-
       <div className="register-right">
-
         <div className="register-card">
-
           <div className="register-heading">
             <h2>Create your account</h2>
             <p>
@@ -96,14 +131,9 @@ function Register() {
             </p>
           </div>
 
-
           <form onSubmit={handleSubmit}>
-
             <div className="form-group">
-
-              <label htmlFor="name">
-                Full name
-              </label>
+              <label htmlFor="name">Full name</label>
 
               <input
                 type="text"
@@ -114,15 +144,10 @@ function Register() {
                 onChange={handleChange}
                 required
               />
-
             </div>
 
-
             <div className="form-group">
-
-              <label htmlFor="email">
-                Email address
-              </label>
+              <label htmlFor="email">Email address</label>
 
               <input
                 type="email"
@@ -133,15 +158,10 @@ function Register() {
                 onChange={handleChange}
                 required
               />
-
             </div>
 
-
             <div className="form-group">
-
-              <label htmlFor="password">
-                Password
-              </label>
+              <label htmlFor="password">Password</label>
 
               <input
                 type="password"
@@ -150,15 +170,12 @@ function Register() {
                 placeholder="Create a password"
                 value={formData.password}
                 onChange={handleChange}
-                minLength="6"
+                minLength={6}
                 required
               />
-
             </div>
 
-
             <div className="form-group">
-
               <label htmlFor="confirmPassword">
                 Confirm password
               </label>
@@ -170,27 +187,35 @@ function Register() {
                 placeholder="Confirm your password"
                 value={formData.confirmPassword}
                 onChange={handleChange}
-                minLength="6"
+                minLength={6}
                 required
               />
-
             </div>
 
+            {error && (
+              <p className="register-error">
+                {error}
+              </p>
+            )}
+
+            {success && (
+              <p className="register-success">
+                {success}
+              </p>
+            )}
 
             <button
               type="submit"
               className="register-submit"
+              disabled={loading}
             >
-              Create Account →
+              {loading ? "Creating account..." : "Create Account →"}
             </button>
-
           </form>
-
 
           <div className="register-divider">
             <span>Already have an account?</span>
           </div>
-
 
           <p className="register-login">
             <Link to="/login">
@@ -198,15 +223,11 @@ function Register() {
             </Link>
           </p>
 
-
           <Link to="/" className="register-back">
             ← Back to home
           </Link>
-
         </div>
-
       </div>
-
     </div>
   );
 }

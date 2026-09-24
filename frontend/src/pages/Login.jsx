@@ -10,19 +10,64 @@ function Login() {
     password: "",
   });
 
+  const [error, setError] = useState("");
+  const [loading, setLoading] = useState(false);
+
   const handleChange = (e) => {
     setFormData({
       ...formData,
       [e.target.name]: e.target.value,
     });
+
+    setError("");
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
 
-    console.log("Login data:", formData);
+    setError("");
+    setLoading(true);
 
-    navigate("/dashboard");
+    try {
+      const response = await fetch(
+        "http://127.0.0.1:8000/auth/login",
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/x-www-form-urlencoded",
+          },
+          body: new URLSearchParams({
+            email: formData.email,
+            password: formData.password,
+          }),
+        }
+      );
+
+      const data = await response.json();
+
+      if (!response.ok) {
+        throw new Error(data.detail || "Login failed");
+      }
+
+      // Store JWT token
+      localStorage.setItem("access_token", data.access_token);
+
+      // Redirect to dashboard
+      navigate("/dashboard");
+
+    } catch (error) {
+      console.error("Login error:", error);
+
+      if (error.message === "Failed to fetch") {
+        setError(
+          "Unable to connect to the server. Please make sure FastAPI is running."
+        );
+      } else {
+        setError(error.message);
+      }
+    } finally {
+      setLoading(false);
+    }
   };
 
   return (
@@ -62,7 +107,6 @@ function Login() {
 
       </div>
 
-
       <div className="auth-right">
 
         <div className="auth-card">
@@ -71,7 +115,6 @@ function Login() {
             <h2>Welcome back!</h2>
             <p>Log in to continue your accountability journey.</p>
           </div>
-
 
           <form onSubmit={handleSubmit}>
 
@@ -90,7 +133,6 @@ function Login() {
                 required
               />
             </div>
-
 
             <div className="form-group">
               <div className="password-label">
@@ -114,21 +156,26 @@ function Login() {
               />
             </div>
 
+            {/* Error message */}
+            {error && (
+              <p className="auth-error">
+                {error}
+              </p>
+            )}
 
             <button
               type="submit"
               className="auth-submit"
+              disabled={loading}
             >
-              Login →
+              {loading ? "Logging in..." : "Login →"}
             </button>
 
           </form>
 
-
           <div className="auth-divider">
             <span>or</span>
           </div>
-
 
           <p className="auth-switch">
             Don't have an account?
@@ -137,7 +184,6 @@ function Login() {
               Create one
             </Link>
           </p>
-
 
           <Link to="/" className="back-home">
             ← Back to home

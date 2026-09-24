@@ -17,6 +17,231 @@
   }
 }
 
+/* =========================================================
+   COMMON SIDEBAR
+   SAME FOR DASHBOARD / GOALS / PARTNER / PROFILE
+   ========================================================= */
+
+.sidebar {
+  width: 245px;
+  min-width: 245px;
+  height: 100vh;
+
+  box-sizing: border-box;
+
+  background: #422d27;
+
+  padding: 30px 20px;
+
+  position: fixed;
+  left: 0;
+  top: 0;
+  bottom: 0;
+
+  display: flex;
+  flex-direction: column;
+
+  z-index: 100;
+}
+
+
+/* =========================================================
+   LOGO
+   ========================================================= */
+
+.sidebar-logo {
+  width: 100%;
+
+  color: white;
+
+  font-size: 22px;
+  font-weight: 700;
+
+  text-decoration: none;
+
+  display: flex;
+  align-items: center;
+
+  gap: 9px;
+
+  white-space: nowrap;
+}
+
+.sidebar-logo span {
+  width: 30px;
+  height: 30px;
+
+  min-width: 30px;
+
+  background: #d56c47;
+
+  border-radius: 50%;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  font-size: 13px;
+}
+
+
+/* =========================================================
+   NAVIGATION
+   ========================================================= */
+
+.sidebar-nav {
+  width: 100%;
+
+  display: flex;
+  flex-direction: column;
+
+  gap: 8px;
+
+  margin-top: 55px;
+}
+
+
+/* EVERY BUTTON SAME SIZE */
+
+.sidebar-nav a {
+  width: 205px;
+  min-width: 205px;
+
+  height: 46px;
+  min-height: 46px;
+
+  box-sizing: border-box;
+
+  padding: 0 15px;
+
+  border-radius: 8px;
+
+  display: flex;
+  align-items: center;
+
+  gap: 12px;
+
+  color: #cdbab2;
+
+  text-decoration: none;
+
+  font-size: 13px;
+  font-weight: 500;
+
+  white-space: nowrap;
+
+  flex-shrink: 0;
+
+  transition: 0.2s ease;
+}
+
+
+/* HOVER */
+
+.sidebar-nav a:hover {
+  background: #563a32;
+  color: white;
+}
+
+
+/* ACTIVE */
+
+.sidebar-nav a.active {
+  background: #c9603e;
+  color: white;
+}
+
+
+/* =========================================================
+   LOGOUT
+   ========================================================= */
+
+.sidebar-logout {
+  width: 205px;
+  min-width: 205px;
+
+  height: 46px;
+  min-height: 46px;
+
+  box-sizing: border-box;
+
+  margin-top: auto;
+
+  padding: 0 15px;
+
+  display: flex;
+  align-items: center;
+
+  gap: 12px;
+
+  color: #bfa9a0;
+
+  text-decoration: none;
+
+  font-size: 13px;
+
+  white-space: nowrap;
+
+  border-radius: 8px;
+
+  flex-shrink: 0;
+
+  transition: 0.2s ease;
+}
+
+.sidebar-logout:hover {
+  background: #563a32;
+  color: white;
+}
+
+
+/* =========================================================
+   MOBILE
+   ========================================================= */
+
+@media (max-width: 700px) {
+
+  .sidebar {
+    width: 65px;
+    min-width: 65px;
+
+    padding: 25px 8px;
+  }
+
+  .sidebar-logo {
+    justify-content: center;
+
+    font-size: 0;
+  }
+
+  .sidebar-nav a {
+    width: 49px;
+    min-width: 49px;
+
+    height: 46px;
+    min-height: 46px;
+
+    padding: 0;
+
+    justify-content: center;
+
+    font-size: 0;
+  }
+
+  .sidebar-logout {
+    width: 49px;
+    min-width: 49px;
+
+    height: 46px;
+    min-height: 46px;
+
+    padding: 0;
+
+    justify-content: center;
+
+    font-size: 0;
+  }
+}
 
 .hero {
   position: relative;

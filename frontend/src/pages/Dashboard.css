@@ -652,23 +652,41 @@
 
 
 /* Create goal */
+.create-goal-container {
+  width: 100%;
 
+  display: flex;
+
+  justify-content: center;
+
+  margin-top: 15px;
+}
 
   .create-goal-btn {
-  display: inline-flex;
+  display: flex;
+
   align-items: center;
   justify-content: center;
+
   padding: 10px 16px;
+
   border: 2px solid #d56c47;
   border-radius: 8px;
+
   background: #fff7f3;
   color: #d56c47;
+
   font-size: 14px;
   font-weight: 700;
+
   text-decoration: none;
+
   cursor: pointer;
-  transition: all 0.2s ease;
+
   box-sizing: border-box;
+
+  transition: all 0.2s ease;
+
   transform: translateY(-8px);
 }
 
