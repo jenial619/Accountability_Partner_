@@ -262,6 +262,7 @@ a {
   align-items: center;
   gap: 12px;
   z-index: 2;
+  overflow: visible;
 }
 
 
@@ -273,7 +274,8 @@ a {
 
 .person-two {
   bottom: 90px;
-  right: 0;
+  right: 18px;
+  z-index: 4;
 }
 
 
@@ -293,6 +295,14 @@ a {
   display: flex;
   flex-direction: column;
   flex: 1;
+  min-width: 0;
+}
+
+
+.person-card strong {
+  color: #2e211f;
+  font-size: 15px;
+  white-space: nowrap;
 }
 
 
@@ -300,6 +310,7 @@ a {
   color: #96776c;
   font-size: 11px;
   margin-top: 3px;
+  white-space: nowrap;
 }
 
 

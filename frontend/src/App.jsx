@@ -4,6 +4,7 @@ import LandingPage from "./pages/LandingPages";
 import Login from "./pages/Login";
 import Register from "./pages/Register";
 import Dashboard from "./pages/Dashboard";
+import GoalsPage from "./pages/Goals";
 
 function App() {
   return (
@@ -17,6 +18,8 @@ function App() {
         <Route path="/register" element={<Register />} />
 
         <Route path="/dashboard" element={<Dashboard />} />
+
+        <Route path="/goals" element={<GoalsPage />} />
 
       </Routes>
     </BrowserRouter>
