@@ -110,32 +110,12 @@ function GoalsPage() {
           </div>
         </header>
 
-        <section className="goals-summary">
-          <div className="goal-summary-card orange-card">
-            <span>Total Goals</span>
-            <strong>3</strong>
-            <small>2 in progress</small>
-          </div>
-
-          <div className="goal-summary-card green-card">
-            <span>Completed</span>
-            <strong>1</strong>
-            <small>Nice momentum</small>
-          </div>
-
-          <div className="goal-summary-card purple-card">
-            <span>Focus Score</span>
-            <strong>82%</strong>
-            <small>Above average</small>
-          </div>
-        </section>
-
         <div className="goals-layout">
-          <section className="goals-board">
-            <div className="section-header">
+          <section className="goals-board goals-board-top">
+            <div className="section-header goals-board-header">
               <div>
-                <span>YOUR PROGRESS</span>
-                <h2>Goal Board</h2>
+                <span>YOUR GOALS</span>
+                <h2>Current Focus</h2>
               </div>
 
               <Link to="/dashboard">Back to dashboard</Link>
@@ -191,6 +171,26 @@ function GoalsPage() {
           </section>
 
           <aside className="goals-side-panel">
+            <div className="goals-summary">
+              <div className="goal-summary-card orange-card">
+                <span>Total Goals</span>
+                <strong>3</strong>
+                <small>2 in progress</small>
+              </div>
+
+              <div className="goal-summary-card green-card">
+                <span>Completed</span>
+                <strong>1</strong>
+                <small>Nice momentum</small>
+              </div>
+
+              <div className="goal-summary-card purple-card">
+                <span>Focus Score</span>
+                <strong>82%</strong>
+                <small>Above average</small>
+              </div>
+            </div>
+
             <div className="panel-card focus-card">
               <div className="panel-header">
                 <span>THIS WEEK</span>
