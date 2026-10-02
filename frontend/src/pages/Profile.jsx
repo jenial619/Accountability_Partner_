@@ -5,18 +5,26 @@ import "./Profile.css";
 function Profile() {
   const navigate = useNavigate();
 
-  const [user, setUser] = useState(null);
-  const [stats, setStats] = useState(null);
-  const [loading, setLoading] = useState(true);
+  const [user, setUser] = useState({
+  name: "User",
+  email: "user@example.com",
+  id: "USR-000",
+  created_at: new Date().toISOString()
+});
+const [stats, setStats] = useState({
+  completed_goals: 0,
+  goal_success: 0
+});
+const [loading, setLoading] = useState(false);
 
   useEffect(() => {
     const fetchProfile = async () => {
       const token = localStorage.getItem("access_token");
 
-      if (!token) {
-        navigate("/login");
-        return;
-      }
+      //if (!token) {
+      //navigate("/login");
+      //return;
+      //}
 
       try {
         // Fetch user profile
