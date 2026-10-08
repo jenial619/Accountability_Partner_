@@ -10,6 +10,11 @@ app = FastAPI(
     description="Backend API for the Accountability Partner application",
     version="1.0.0"
 )
+<<<<<<< HEAD
+=======
+
+
+>>>>>>> 6ff1f0bcc2414830031e593c7948d30bc20c84e9
 app.add_middleware(
     CORSMiddleware,
     allow_origins=[
