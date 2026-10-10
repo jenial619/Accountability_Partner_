@@ -20,6 +20,29 @@ function Login() {
   };
 
   const handleSubmit = async (e) => {
+<<<<<<< HEAD
+  e.preventDefault();
+  try {
+    const res = await fetch("http://127.0.0.1:8000/auth/login", {
+      method: "POST",
+      headers: { "Content-Type": "application/x-www-form-urlencoded" },
+      body: new URLSearchParams({
+        email: formData.email,
+        password: formData.password,
+      }),
+    });
+    const data = await res.json();
+    if (!res.ok) {
+      alert(data.detail || "Login failed");
+      return;
+    }
+    localStorage.setItem("access_token", data.access_token);
+    navigate("/profile");
+  } catch (err) {
+    alert("Could not reach the server");
+  }
+};
+=======
     e.preventDefault();
     setError("");
     setLoading(true);
@@ -69,6 +92,7 @@ function Login() {
     }
   };
 
+>>>>>>> origin/main
   return (
     <div className="auth-page">
       <div className="auth-left">

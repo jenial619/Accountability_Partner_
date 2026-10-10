@@ -603,8 +603,12 @@ function Dashboard() {
             </div>
 
             <h1>
+<<<<<<< HEAD
+              Good evening!
+=======
               Good to see you,{" "}
               {user?.name || "there"}! 👋
+>>>>>>> origin/main
             </h1>
 
             <p className="dashboard-subtitle">

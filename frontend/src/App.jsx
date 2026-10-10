@@ -4,7 +4,11 @@ import LandingPage from "./pages/LandingPages";
 import Login from "./pages/Login";
 import Register from "./pages/Register";
 import Dashboard from "./pages/Dashboard";
+<<<<<<< HEAD
+import Profile from "./pages/Profile";
+=======
 import GoalsPage from "./pages/Goals";
+>>>>>>> origin/main
 
 import Goals from "./pages/Goals";
 import Partner from "./pages/Partner";
@@ -23,6 +27,10 @@ function App() {
         <Route path="/register" element={<Register />} />
 
         <Route path="/dashboard" element={<Dashboard />} />
+<<<<<<< HEAD
+        
+        <Route path="/profile" element={<Profile />} />
+=======
         <Route
           path="/goals"
           element={<Goals />}
@@ -31,6 +39,7 @@ function App() {
           path="/partners"
           element={<Partner />}
         />
+>>>>>>> origin/main
 
         <Route
           path="/profile"

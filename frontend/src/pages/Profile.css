@@ -809,4 +809,170 @@ body,
   padding: 0;
 
   overflow-x: hidden;
+<<<<<<< HEAD
+}
+/* =========================================================
+   DARK THEME OVERRIDES
+   ========================================================= */
+
+.profile-page.dark-theme {
+  background: #181210;
+  color: #f4eae6;
+}
+
+.profile-page.dark-theme .profile-card,
+.profile-page.dark-theme .preferences-card,
+.profile-page.dark-theme .profile-stats div {
+  background: #251b17;
+  border-color: #3f2f29;
+}
+
+.profile-page.dark-theme .profile-header h1,
+.profile-page.dark-theme .profile-top h2,
+.profile-page.dark-theme .preferences-card h2,
+.profile-page.dark-theme .preference h3 {
+  background: transparent;
+  color: #ffffff;
+}
+
+.profile-page.dark-theme .profile-header > span,
+.profile-page.dark-theme .profile-top p,
+.profile-page.dark-theme .profile-top span,
+.profile-page.dark-theme .profile-stats span,
+.profile-page.dark-theme .preference p,
+.profile-page.dark-theme .profile-field label {
+  color: #b3998f;
+}
+
+.profile-page.dark-theme .profile-field input {
+  background: #1c1412;
+  border-color: #3f2f29;
+  color: #f4eae6;
+}
+
+.profile-page.dark-theme .profile-field input:focus {
+  border-color: #ff7043;
+}
+
+.profile-page.dark-theme .edit-profile {
+  background: #2d211d;
+  border-color: #4a362f;
+  color: #ff8a68;
+}
+
+.profile-page.dark-theme .edit-profile:hover {
+  background: #ff7043;
+  border-color: #ff7043;
+  color: #ffffff;
+}
+/* =========================================================
+   PICTURE UPLOAD BUTTON
+   ========================================================= */
+
+.profile-avatar-area {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 10px;
+}
+
+.picture-upload {
+  display: inline-block;
+  padding: 6px 12px;
+  background: #fff8f5;
+  border: 1px solid #dcbfb0;
+  border-radius: 6px;
+  color: #c9603e;
+  font-size: 11px;
+  font-weight: 600;
+  cursor: pointer;
+  text-align: center;
+  transition: all 0.2s ease;
+}
+
+.picture-upload:hover {
+  background: #d56c47;
+  border-color: #d56c47;
+  color: #ffffff;
+}
+
+/* Dark Theme variant for Picture Upload Button */
+.profile-page.dark-theme .picture-upload {
+  background: #2d211d;
+  border-color: #4a362f;
+  color: #ff8a68;
+}
+
+.profile-page.dark-theme .picture-upload:hover {
+  background: #ff7043;
+  border-color: #ff7043;
+  color: #ffffff;
+}
+/* =========================================================
+   EDIT FORM ACTION BUTTONS
+   ========================================================= */
+
+.profile-edit-actions {
+  grid-column: 1 / -1;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin-top: 10px;
+}
+
+.cancel-profile {
+  padding: 10px 16px;
+  background: transparent;
+  border: 1px solid #dcbfb0;
+  border-radius: 8px;
+  color: #80675d;
+  cursor: pointer;
+  font-size: 11px;
+  font-weight: 600;
+  transition: all 0.2s ease;
+}
+
+.cancel-profile:hover {
+  background: rgba(220, 191, 176, 0.2);
+  color: #30221f;
+}
+
+/* Dark Theme styling for Cancel button */
+.profile-page.dark-theme .cancel-profile {
+  border-color: #4a362f;
+  color: #b3998f;
+}
+
+.profile-page.dark-theme .cancel-profile:hover {
+  background: #3f2f29;
+  color: #ffffff;
+}
+/* =========================================================
+   SAVE / ALERT MESSAGES
+   ========================================================= */
+
+.profile-save-message {
+  margin-top: 18px;
+  padding: 10px 14px;
+  border-radius: 8px;
+  font-size: 11px;
+  font-weight: 600;
+  text-align: center;
+  background: rgba(201, 96, 62, 0.1);
+  color: #c9603e;
+  border: 1px solid rgba(201, 96, 62, 0.25);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  transition: all 0.2s ease;
+}
+
+/* Dark Theme variant for Save Message */
+.profile-page.dark-theme .profile-save-message {
+  background: rgba(255, 112, 67, 0.12);
+  color: #ff8a68;
+  border-color: rgba(255, 112, 67, 0.25);
+=======
+>>>>>>> origin/main
 }
