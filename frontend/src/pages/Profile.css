@@ -809,6 +809,7 @@ body,
   padding: 0;
 
   overflow-x: hidden;
+<<<<<<< HEAD
 }
 /* =========================================================
    DARK THEME OVERRIDES
@@ -972,4 +973,6 @@ body,
   background: rgba(255, 112, 67, 0.12);
   color: #ff8a68;
   border-color: rgba(255, 112, 67, 0.25);
+=======
+>>>>>>> origin/main
 }

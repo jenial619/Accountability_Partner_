@@ -5,7 +5,6 @@ function LandingPage() {
   return (
     <div className="landing-page">
 
-      {/* Navbar */}
       <nav className="navbar">
         <div className="logo">
           <span className="logo-icon">◉</span>
@@ -30,7 +29,6 @@ function LandingPage() {
       </nav>
 
 
-      {/* Hero Section */}
       <section className="hero" id="home">
 
         <div className="hero-content">
@@ -81,7 +79,6 @@ function LandingPage() {
         </div>
 
 
-        {/* Hero Visual */}
         <div className="hero-visual">
 
           <div className="circle-bg"></div>
@@ -124,7 +121,6 @@ function LandingPage() {
       </section>
 
 
-      {/* Features */}
       <section className="features-section" id="features">
 
         <div className="section-heading">
@@ -179,7 +175,6 @@ function LandingPage() {
       </section>
 
 
-      {/* How It Works */}
       <section className="how-section" id="how-it-works">
 
         <div className="section-heading">
@@ -227,7 +222,6 @@ function LandingPage() {
       </section>
 
 
-      {/* CTA */}
       <section className="cta-section">
 
         <div>
@@ -251,7 +245,6 @@ function LandingPage() {
       </section>
 
 
-      {/* Footer */}
       <footer>
 
         <div className="footer-logo">
