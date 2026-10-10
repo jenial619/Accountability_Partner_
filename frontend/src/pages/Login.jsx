@@ -17,16 +17,28 @@ function Login() {
     });
   };
 
-  const handleSubmit = (e) => {
-    e.preventDefault();
-
-    console.log("Login data:", formData);
-
-    // Temporary navigation
-    // Later this will call your FastAPI login API
-    navigate("/dashboard");
-  };
-
+  const handleSubmit = async (e) => {
+  e.preventDefault();
+  try {
+    const res = await fetch("http://127.0.0.1:8000/auth/login", {
+      method: "POST",
+      headers: { "Content-Type": "application/x-www-form-urlencoded" },
+      body: new URLSearchParams({
+        email: formData.email,
+        password: formData.password,
+      }),
+    });
+    const data = await res.json();
+    if (!res.ok) {
+      alert(data.detail || "Login failed");
+      return;
+    }
+    localStorage.setItem("access_token", data.access_token);
+    navigate("/profile");
+  } catch (err) {
+    alert("Could not reach the server");
+  }
+};
   return (
     <div className="auth-page">
 

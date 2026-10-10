@@ -110,7 +110,7 @@ function Dashboard() {
             </p>
 
             <h1>
-              Good evening, Sarah! 👋
+              Good evening!
             </h1>
 
             <p className="dashboard-subtitle">
