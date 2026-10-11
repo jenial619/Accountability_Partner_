@@ -3,7 +3,7 @@ import { useEffect, useRef, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import "./Profile.css";
 
-const API_URL = "http://127.0.0.1:8000";
+const API_URL = import.meta.env.VITE_API_URL;
 const PROFILE_PHOTO_KEY = "saathi_profile_photo";
 const THEME_KEY = "saathi_theme";
 

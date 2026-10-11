@@ -3,7 +3,7 @@ import { useCallback, useEffect, useMemo, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import "./Goals.css";
 
-const API_URL = import.meta.env.VITE_API_URL || "http://127.0.0.1:8000";
+const API_URL = import.meta.env.VITE_API_URL || import.meta.env.VITE_API_URL;;
 
 async function apiRequest(path, token, options = {}) {
   const response = await fetch(`${API_URL}${path}`, {
