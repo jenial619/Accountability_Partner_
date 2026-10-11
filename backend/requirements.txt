@@ -7,3 +7,4 @@ psycopg2-binary
 psycopg[binary]
 email-validator
 passlib[bcrypt]
+python-jose[cryptography]
