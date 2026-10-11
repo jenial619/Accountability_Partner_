@@ -18,8 +18,8 @@ allow_origins=[
 "https://accountability-partner-three.vercel.app",
 ],
 allow_credentials=True,
-allow_methods=[""],
-allow_headers=[""],
+allow_methods=["*"],
+allow_headers=["*"],
 )
 
 # Create database tables
