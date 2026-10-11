@@ -5,3 +5,4 @@ sqlalchemy
 python-dotenv
 psycopg2-binary
 psycopg[binary]
+email-validator
