@@ -1,1672 +1,1201 @@
-/* =========================================================
-   PARTNER PAGE
-   MATCHES GOALS PAGE DESIGN
-   ========================================================= */
 
 * {
   box-sizing: border-box;
 }
 
 .partner-page {
+  --partner-bg: #fff8f5;
+  --partner-text: #3e2b25;
+  --partner-muted: #84736c;
+  --partner-brown: #533a35;
+  --partner-orange: #ff7043;
+  --partner-border: #f0e5e0;
+
+  display: flex;
   min-height: 100vh;
   width: 100%;
-
-  background: #fff8f5;
-  color: #3e2b25;
-
-  font-family:
-    Inter,
-    -apple-system,
-    BlinkMacSystemFont,
-    "Segoe UI",
+  background: var(--partner-bg);
+  color: var(--partner-text);
+  font-family: Inter, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto,
     sans-serif;
 }
 
+.partner-page button,
+.partner-page input,
+.partner-page select,
+.partner-page textarea {
+  font: inherit;
+}
 
-/* =========================================================
-   SIDEBAR
-   SAME STYLE AS GOALS
-   ========================================================= */
+.partner-page button:focus-visible,
+.partner-page input:focus-visible,
+.partner-page select:focus-visible,
+.partner-page textarea:focus-visible,
+.partner-page a:focus-visible {
+  outline: 3px solid rgba(255, 112, 67, 0.35);
+  outline-offset: 2px;
+}
+
+/* SIDEBAR */
 
 .partner-sidebar {
+  position: fixed;
+  inset: 0 auto 0 0;
+  z-index: 20;
+  display: flex;
+  flex-direction: column;
   width: 240px;
   min-width: 240px;
   min-height: 100vh;
-
-  position: fixed;
-  left: 0;
-  top: 0;
-  bottom: 0;
-
-  background: #533a35;
-
-  color: white;
-
   padding: 30px 18px 24px;
-
-  display: flex;
-  flex-direction: column;
-
-  z-index: 10;
+  background: var(--partner-brown);
+  color: #fff;
 }
-
-
-/* =========================================================
-   SAATHI LOGO
-   ========================================================= */
 
 .partner-logo {
   display: flex;
   align-items: center;
-
   gap: 12px;
-
-  color: #ffffff;
-  text-decoration: none;
-
+  margin-bottom: 48px;
+  padding: 0 12px;
+  color: #fff;
   font-size: 23px;
   font-weight: 700;
-
-  padding: 0 12px;
-
-  margin-bottom: 55px;
+  text-decoration: none;
 }
-
 
 .partner-logo span {
+  display: flex;
   width: 34px;
   height: 34px;
-
-  border-radius: 50%;
-
-  background: #d85f49;
-
-  display: flex;
+  flex-shrink: 0;
   align-items: center;
   justify-content: center;
-
-  color: white;
-
+  border-radius: 50%;
+  background: #d85f49;
+  color: #fff;
   font-size: 16px;
-
-  box-shadow:
-    0 3px 12px rgba(216, 95, 73, 0.25);
+  box-shadow: 0 3px 12px rgba(216, 95, 73, 0.25);
 }
-
-
-/* =========================================================
-   NAVIGATION
-   ========================================================= */
 
 .partner-sidebar nav {
   display: flex;
   flex-direction: column;
-
   gap: 10px;
-
-  margin-top: 0;
 }
-
 
 .partner-sidebar nav a {
-  min-height: 54px;
-
   display: flex;
+  min-height: 52px;
   align-items: center;
-
+  gap: 12px;
   padding: 0 17px;
-
   border-radius: 10px;
-
-  color: #ffffff;
-  text-decoration: none;
-
-  font-size: 15px;
+  color: #fff;
+  font-size: 14px;
   font-weight: 500;
-
-  transition: all 0.2s ease;
+  text-decoration: none;
+  transition: background 0.2s ease, transform 0.2s ease;
 }
-
-
-/* Hover */
 
 .partner-sidebar nav a:hover {
-  background: rgba(255, 255, 255, 0.08);
-
-  color: white;
+  background: rgba(255, 255, 255, 0.09);
 }
-
-
-/* Active */
 
 .partner-sidebar nav a.active {
-  background: #ff7043;
-
-  color: white;
-
-  box-shadow:
-    0 7px 20px rgba(217, 87, 71, 0.20);
+  background: var(--partner-orange);
+  color: #fff;
+  box-shadow: 0 7px 20px rgba(217, 87, 71, 0.2);
 }
 
-
-/* =========================================================
-   LOGOUT
-   ========================================================= */
-
-.partner-logout {
-  margin-top: auto;
-
+.partner-sidebar-tip {
   display: flex;
   align-items: center;
-
-  gap: 13px;
-
-  padding: 10px 17px;
-
-  border: none;
-
-  background: transparent;
-
-  color: #ffffff;
-
-  text-decoration: none;
-
-  font-size: 14px;
-
-  cursor: pointer;
-
-  text-align: left;
-
-  transition: color 0.2s ease;
+  gap: 10px;
+  margin-top: auto;
+  margin-bottom: 20px;
+  padding: 14px 12px;
+  border-radius: 12px;
+  background: rgba(255, 255, 255, 0.08);
 }
 
+.partner-sidebar-tip span {
+  font-size: 21px;
+}
+
+.partner-sidebar-tip p {
+  color: #f3e6e0;
+  font-size: 11px;
+  line-height: 1.5;
+}
+
+.partner-logout {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  width: 100%;
+  padding: 12px 17px;
+  border: 0;
+  border-radius: 8px;
+  background: transparent;
+  color: #fff;
+  font-size: 14px;
+  text-align: left;
+  cursor: pointer;
+}
 
 .partner-logout:hover {
   color: #ffb39c;
+  background: rgba(255, 255, 255, 0.06);
 }
 
-
-/* =========================================================
-   MAIN CONTENT
-   ========================================================= */
+/* MAIN CONTENT */
 
 .partner-main {
-  margin-left: 240px;
-
+  flex: 1;
+  min-width: 0;
   min-height: 100vh;
-
-  padding: 38px 42px 50px;
-
+  margin-left: 240px;
+  padding: 35px 40px 50px;
   overflow-x: hidden;
 }
 
-
-/* =========================================================
-   PAGE HEADER
-   ========================================================= */
-
 .partner-page-header {
-  display: flex;
-
-  justify-content: space-between;
-  align-items: flex-start;
-
-  margin-bottom: 30px;
+  margin-bottom: 25px;
 }
-
 
 .partner-page-header p {
-  margin: 0 0 8px;
-
+  margin: 0 0 6px;
   color: #c65d3b;
-
   font-size: 11px;
-
   font-weight: 700;
-
   letter-spacing: 1.5px;
+  text-transform: uppercase;
 }
-
 
 .partner-page-header h1 {
   margin: 0;
-
   color: #30221f;
-
   font-size: 30px;
-
   font-weight: 700;
-
   letter-spacing: -0.5px;
 }
 
-
 .partner-page-header span {
   display: block;
-
-  margin-top: 8px;
-
+  margin-top: 6px;
   color: #7e706a;
+  font-size: 14px;
+  line-height: 1.6;
+}
 
+.partner-error {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  margin-bottom: 20px;
+  padding: 12px 15px;
+  border: 1px solid #f0c9c0;
+  border-radius: 10px;
+  background: #fff0ec;
+  color: #a83f31;
+  font-size: 13px;
+}
+
+.partner-error button {
+  border: 0;
+  background: transparent;
+  color: inherit;
+  font-size: 22px;
+  cursor: pointer;
+}
+
+.partner-loading {
+  display: grid;
+  min-height: 65vh;
+  place-items: center;
+  color: var(--partner-muted);
   font-size: 14px;
 }
 
+/* TWO-COLUMN WORKSPACE */
 
-/* =========================================================
-   GENERIC SECTION TITLE
-   ========================================================= */
+.partner-workspace-grid {
+  display: grid;
+  grid-template-columns: minmax(300px, 380px) minmax(0, 1fr);
+  align-items: start;
+  gap: 25px;
+}
+
+.partner-left-col,
+.partner-right-col {
+  display: flex;
+  min-width: 0;
+  flex-direction: column;
+  gap: 20px;
+}
+
+/* CARDS */
+
+.connected-partners-card,
+.find-partner-card,
+.partner-requests-card,
+.partner-quote-card,
+.partner-progress-card,
+.message-card {
+  min-width: 0;
+  padding: 24px;
+  border: 1px solid var(--partner-border);
+  border-radius: 15px;
+  background: #fff;
+  box-shadow: 0 3px 14px rgba(90, 58, 45, 0.04);
+}
+
+.partner-section-title {
+  margin-bottom: 15px;
+}
 
 .partner-section-title span {
   display: block;
-
   color: #c65d3b;
-
   font-size: 10px;
-
   font-weight: 700;
-
   letter-spacing: 1.5px;
+  text-transform: uppercase;
 }
-
 
 .partner-section-title h2 {
-  margin: 6px 0 0;
-
+  margin: 5px 0 0;
   color: #302522;
-
-  font-size: 21px;
-
+  font-size: 19px;
   font-weight: 700;
+  line-height: 1.35;
 }
 
-
-/* =========================================================
-   CONNECTED PARTNERS
-   ========================================================= */
-
-.connected-partners-card {
-  background: #ffffff;
-
-  border: 1px solid #f0e5e0;
-
-  border-radius: 15px;
-
-  padding: 25px;
-
-  box-shadow:
-    0 3px 14px rgba(90, 58, 45, 0.04);
-}
-
-
-/* Empty state */
-
-.partner-empty-goals {
-  margin-top: 25px;
-
-  padding: 30px 20px;
-
-  background: #fff8f5;
-
-  border: 1px dashed #eadbd4;
-
-  border-radius: 12px;
-
-  text-align: center;
-}
-
-
-.partner-empty-goals h3 {
-  margin: 0;
-
-  color: #3e2b25;
-
-  font-size: 15px;
-}
-
-
-.partner-empty-goals p {
-  margin: 8px 0 0;
-
-  color: #806f68;
-
+.partner-helper-text {
+  margin: 0 0 12px;
+  color: var(--partner-muted);
   font-size: 12px;
-
-  line-height: 1.5;
+  line-height: 1.6;
 }
 
+/* SEARCH */
 
-/* =========================================================
-   CONNECTED PARTNER LIST
-   ========================================================= */
+.partner-search-input {
+  width: 100%;
+  min-width: 0;
+  margin-top: 4px;
+  padding: 11px 13px;
+  border: 1px solid #eadbd4;
+  border-radius: 9px;
+  background: #fff8f5;
+  color: var(--partner-text);
+  font-size: 12px;
+  outline: none;
+}
+
+.partner-search-input:focus,
+.find-partner-form input:focus,
+.find-partner-form select:focus,
+.message-card textarea:focus {
+  border-color: var(--partner-orange);
+  box-shadow: 0 0 0 3px rgba(255, 112, 67, 0.1);
+}
+
+/* CONNECTED PARTNERS */
 
 .connected-partners-list {
   display: flex;
-
   flex-direction: column;
-
   gap: 10px;
-
-  margin-top: 22px;
+  margin-top: 15px;
 }
-
 
 .connected-partner-item {
-  width: 100%;
-
-  border: 1px solid #f0e5e0;
-
-  border-radius: 12px;
-
-  background: #fffdfb;
-
-  padding: 15px 17px;
-
   display: flex;
-
+  width: 100%;
+  min-width: 0;
   align-items: center;
-
-  gap: 14px;
-
-  cursor: pointer;
-
+  gap: 11px;
+  padding: 12px;
+  border: 1px solid #f0e5e0;
+  border-radius: 12px;
+  background: #fffdfb;
   text-align: left;
-
-  color: #3e2b25;
-
-  transition:
-    background 0.2s ease,
-    border-color 0.2s ease,
-    transform 0.2s ease,
-    box-shadow 0.2s ease;
+  cursor: pointer;
+  transition: background 0.2s ease, border-color 0.2s ease;
 }
-
 
 .connected-partner-item:hover {
-  background: #fff8f5;
-
   border-color: #e7cfc4;
-
-  transform: translateY(-1px);
+  background: #fff8f5;
 }
-
 
 .connected-partner-item.selected {
+  border-color: var(--partner-orange);
   background: #fff1eb;
-
-  border-color: #ff7043;
-
-  box-shadow:
-    0 4px 14px rgba(255, 112, 67, 0.10);
+  box-shadow: 0 4px 14px rgba(255, 112, 67, 0.1);
 }
 
-
-/* Small avatar */
-
 .partner-avatar-small {
-  width: 46px;
-  height: 46px;
-
-  flex-shrink: 0;
-
-  border-radius: 50%;
-
-  background: #f5c5b0;
-
-  color: #6b3d31;
-
   display: flex;
+  width: 42px;
+  height: 42px;
+  flex-shrink: 0;
   align-items: center;
   justify-content: center;
-
-  font-size: 18px;
-
+  border-radius: 50%;
+  background: #f5c5b0;
+  color: #6b3d31;
+  font-size: 16px;
   font-weight: 700;
 }
 
-
-/* Partner info */
-
 .connected-partner-info {
-  flex: 1;
-
-  min-width: 0;
-
   display: flex;
+  flex: 1;
+  min-width: 0;
   flex-direction: column;
-
   gap: 4px;
 }
 
-
 .connected-partner-info strong {
+  overflow-wrap: anywhere;
   color: #302522;
-
-  font-size: 14px;
-
+  font-size: 12px;
   font-weight: 700;
 }
 
-
 .connected-partner-info span {
+  overflow-wrap: anywhere;
   color: #806f68;
-
-  font-size: 11px;
-
-  overflow: hidden;
-
-  text-overflow: ellipsis;
-
-  white-space: nowrap;
+  font-size: 10px;
 }
-
 
 .connected-partner-info small {
+  overflow-wrap: anywhere;
   color: #a15a45;
-
   font-size: 10px;
-
-  margin-top: 2px;
+  line-height: 1.4;
 }
-
-
-/* Partner stats */
 
 .connected-partner-stats {
   display: flex;
-
-  flex-direction: column;
-
-  align-items: flex-end;
-
-  gap: 7px;
-
   flex-shrink: 0;
+  flex-direction: column;
+  align-items: flex-end;
+  gap: 6px;
 }
-
 
 .connected-badge {
-  padding: 5px 9px;
-
+  padding: 4px 7px;
   border-radius: 20px;
-
   background: #e8f5e8;
-
   color: #32833c;
-
   font-size: 9px;
-
   font-weight: 700;
+  white-space: nowrap;
 }
-
 
 .connected-partner-stats strong {
   color: #ff6333;
-
-  font-size: 13px;
+  font-size: 11px;
 }
 
-
-/* =========================================================
-   FIND PARTNER
-   ========================================================= */
-
-.find-partner-card {
-  background: #ffffff;
-
-  border: 1px solid #f0e5e0;
-
-  border-radius: 15px;
-
-  padding: 25px;
-
-  margin-top: 18px;
-
-  box-shadow:
-    0 3px 14px rgba(90, 58, 45, 0.035);
-}
-
-
-.find-partner-card > p {
-  margin: 12px 0 20px;
-
-  color: #806f68;
-
-  font-size: 12px;
-
-  line-height: 1.5;
-}
-
+/* FORM */
 
 .find-partner-form {
-  width: 100%;
-
-  display: grid;
-
-  grid-template-columns: 1fr 1fr auto;
-
-  gap: 10px;
-
-  max-width: 850px;
-}
-
-
-/* Goal select */
-
-.find-partner-form select {
-  width: 100%;
-
-  padding: 12px 14px;
-
-  border: 1px solid #eadbd4;
-
-  border-radius: 9px;
-
-  background: #fff8f5;
-
-  color: #3e2b25;
-
-  font-size: 13px;
-
-  outline: none;
-
-  cursor: pointer;
-}
-
-
-.find-partner-form select:focus {
-  border-color: #d56c47;
-}
-
-
-/* User ID input */
-
-.find-partner-form input {
-  width: 100%;
-
-  padding: 12px 14px;
-
-  border: 1px solid #eadbd4;
-
-  border-radius: 9px;
-
-  background: #fff8f5;
-
-  color: #3e2b25;
-
-  font-size: 13px;
-
-  outline: none;
-}
-
-
-.find-partner-form input::placeholder {
-  color: #a28d84;
-}
-
-
-.find-partner-form input:focus {
-  border-color: #d56c47;
-}
-
-
-/* Send request */
-
-.find-partner-form button {
-  padding: 12px 18px;
-
-  border: none;
-
-  border-radius: 9px;
-
-  background: #ff7043;
-
-  color: white;
-
-  font-size: 12px;
-
-  font-weight: 700;
-
-  cursor: pointer;
-
-  transition: background 0.2s ease;
-}
-
-
-.find-partner-form button:hover {
-  background: #d85f49;
-}
-
-
-.find-partner-form button:disabled {
-  opacity: 0.6;
-
-  cursor: not-allowed;
-}
-
-
-/* =========================================================
-   PARTNER REQUESTS
-   ========================================================= */
-
-.partner-requests-card {
-  background: #ffffff;
-
-  border: 1px solid #f0e5e0;
-
-  border-radius: 15px;
-
-  padding: 25px;
-
-  margin-top: 18px;
-
-  box-shadow:
-    0 3px 14px rgba(90, 58, 45, 0.035);
-}
-
-
-.requests-list {
-  margin-top: 20px;
-}
-
-
-.partner-request {
-  min-height: 70px;
-
   display: flex;
-
-  align-items: center;
-
-  gap: 14px;
-
-  padding: 15px 0;
-
-  border-bottom: 1px solid #f1e6e1;
-}
-
-
-.partner-request:last-child {
-  border-bottom: none;
-}
-
-
-/* Request avatar */
-
-.request-avatar {
-  width: 46px;
-  height: 46px;
-
-  flex-shrink: 0;
-
-  border-radius: 50%;
-
-  background: #f5ddd2;
-
-  color: #c9603e;
-
-  display: flex;
-  align-items: center;
-  justify-content: center;
-
-  font-weight: 700;
-
-  font-size: 17px;
-}
-
-
-/* Request info */
-
-.request-info {
-  flex: 1;
-
-  min-width: 0;
-
-  display: flex;
-
   flex-direction: column;
-
-  gap: 4px;
+  gap: 9px;
+  margin-top: 12px;
 }
 
-
-.request-info strong {
-  color: #3e2b25;
-
-  font-size: 14px;
-}
-
-
-.request-info span {
-  color: #80675d;
-
+.find-partner-form label {
+  margin-top: 3px;
+  color: #66534b;
   font-size: 11px;
-}
-
-
-.request-info small {
-  color: #a15a45;
-
-  font-size: 10px;
-}
-
-
-/* Request buttons */
-
-.request-actions {
-  display: flex;
-
-  gap: 8px;
-
-  flex-shrink: 0;
-}
-
-
-.accept-request-btn,
-.reject-request-btn {
-  border: none;
-
-  padding: 9px 15px;
-
-  border-radius: 8px;
-
-  cursor: pointer;
-
-  font-size: 11px;
-
-  font-weight: 700;
-
-  transition: all 0.2s ease;
-}
-
-
-.accept-request-btn {
-  background: #ff7043;
-
-  color: white;
-}
-
-
-.accept-request-btn:hover {
-  background: #d85f49;
-}
-
-
-.reject-request-btn {
-  background: #f3e7e0;
-
-  color: #80675d;
-}
-
-
-.reject-request-btn:hover {
-  background: #ead8ce;
-}
-
-
-/* =========================================================
-   SELECTED PARTNER PROFILE
-   ========================================================= */
-
-.partner-profile-card {
-  margin-top: 18px;
-
-  padding: 28px;
-
-  background: #533a35;
-
-  border-radius: 15px;
-
-  color: white;
-
-  display: flex;
-
-  gap: 22px;
-
-  align-items: center;
-
-  box-shadow:
-    0 5px 18px rgba(83, 58, 53, 0.12);
-}
-
-
-/* Large avatar */
-
-.large-partner-avatar {
-  width: 82px;
-  height: 82px;
-
-  flex-shrink: 0;
-
-  border-radius: 50%;
-
-  background: #f1b59c;
-
-  color: #704438;
-
-  display: flex;
-  align-items: center;
-  justify-content: center;
-
-  font-size: 28px;
-
-  font-weight: 700;
-}
-
-
-/* Partner information */
-
-.partner-info {
-  flex: 1;
-
-  min-width: 0;
-}
-
-
-.online-badge {
-  color: #a9d59e;
-
-  font-size: 10px;
-
   font-weight: 600;
 }
 
-
-.partner-info h2 {
-  margin: 7px 0;
-
-  color: #ffffff;
-
-  font-size: 23px;
-}
-
-
-.partner-info > p {
-  margin: 5px 0;
-
-  color: #d8c4bc;
-
-  font-size: 12px;
-}
-
-
-.partner-info > p strong {
-  color: #ffffff;
-}
-
-
-/* =========================================================
-   PARTNER STATS
-   ========================================================= */
-
-.partner-stats {
-  display: flex;
-
-  gap: 40px;
-
-  margin-top: 20px;
-}
-
-
-.partner-stats div {
-  display: flex;
-
-  flex-direction: column;
-
-  gap: 4px;
-}
-
-
-.partner-stats strong {
-  color: #ffab89;
-
-  font-size: 18px;
-}
-
-
-.partner-stats span {
-  color: #c8b2aa;
-
-  font-size: 9px;
-}
-
-
-/* =========================================================
-   PARTNER GOALS / PROGRESS
-   ========================================================= */
-
-.partner-progress-card {
-  margin-top: 18px;
-
-  padding: 25px;
-
-  background: #ffffff;
-
-  border: 1px solid #f0e5e0;
-
-  border-radius: 15px;
-
-  box-shadow:
-    0 3px 14px rgba(90, 58, 45, 0.035);
-}
-
-
-.partner-goal {
-  margin-top: 23px;
-
-  display: grid;
-
-  grid-template-columns: 1fr auto;
-
-  gap: 5px 15px;
-
-  padding-bottom: 18px;
-
-  border-bottom: 1px solid #f2e7e2;
-}
-
-
-.partner-goal:last-child {
-  border-bottom: none;
-
-  padding-bottom: 0;
-}
-
-
-.partner-goal h3 {
-  margin: 0;
-
-  color: #302522;
-
-  font-size: 13px;
-}
-
-
-.partner-goal p {
-  margin: 4px 0 0;
-
-  color: #8d7c75;
-
-  font-size: 10px;
-
-  line-height: 1.5;
-}
-
-
-.partner-goal strong {
-  color: #ff6333;
-
-  font-size: 13px;
-}
-
-
-.partner-bar {
-  grid-column: 1 / 3;
-
+.find-partner-form select,
+.find-partner-form input {
   width: 100%;
-
-  height: 7px;
-
-  background: #eee5e1;
-
-  border-radius: 10px;
-
-  overflow: hidden;
-
-  margin-top: 6px;
-}
-
-
-.partner-bar div {
-  height: 100%;
-
-  background: #ff7043;
-
-  border-radius: 10px;
-
-  transition: width 0.3s ease;
-}
-
-
-.partner-goal small {
-  grid-column: 1 / 3;
-
-  color: #8d7c75;
-
-  font-size: 10px;
-
-  margin-top: 2px;
-}
-
-
-/* =========================================================
-   MESSAGE CARD
-   ========================================================= */
-
-.message-card {
-  margin-top: 18px;
-
-  padding: 25px;
-
-  background: #ffffff;
-
-  border: 1px solid #f0e5e0;
-
-  border-radius: 15px;
-
-  box-shadow:
-    0 3px 14px rgba(90, 58, 45, 0.035);
-}
-
-
-/* Messages */
-
-.partner-messages {
-  margin-top: 20px;
-
-  max-height: 280px;
-
-  overflow-y: auto;
-
-  padding: 5px;
-}
-
-
-.no-messages {
-  padding: 22px;
-
-  border-radius: 10px;
-
-  background: #fff8f5;
-
-  color: #8d7c75;
-
-  text-align: center;
-
-  font-size: 12px;
-}
-
-
-/* Message bubbles */
-
-.message-bubble {
-  max-width: 75%;
-
-  padding: 10px 13px;
-
-  margin-bottom: 10px;
-
-  border-radius: 12px;
-
-  font-size: 12px;
-
-  line-height: 1.45;
-}
-
-
-.message-bubble p {
-  margin: 0;
-}
-
-
-.message-bubble small {
-  display: block;
-
-  margin-top: 5px;
-
-  font-size: 9px;
-
-  opacity: 0.7;
-}
-
-
-.message-bubble.received {
-  margin-right: auto;
-
-  background: #f5ebe6;
-
-  color: #4d3932;
-
-  border-bottom-left-radius: 3px;
-}
-
-
-.message-bubble.sent {
-  margin-left: auto;
-
-  background: #ff7043;
-
-  color: white;
-
-  border-bottom-right-radius: 3px;
-}
-
-
-/* Message textarea */
-
-.message-card textarea {
-  width: 100%;
-
-  min-height: 105px;
-
-  resize: vertical;
-
-  margin-top: 15px;
-
-  padding: 13px;
-
-  border: 1px solid #eadbd2;
-
+  min-width: 0;
+  padding: 11px 12px;
+  border: 1px solid #eadbd4;
   border-radius: 9px;
-
   background: #fff8f5;
-
-  outline: none;
-
-  font-family: inherit;
-
+  color: var(--partner-text);
   font-size: 12px;
-
-  color: #49322a;
+  outline: none;
 }
 
-
-.message-card textarea::placeholder {
-  color: #a28d84;
-}
-
-
-.message-card textarea:focus {
-  border-color: #d56c47;
-}
-
-
-/* Send message */
-
-.message-card button {
-  width: 100%;
-
-  border: none;
-
-  margin-top: 10px;
-
-  padding: 12px;
-
-  border-radius: 8px;
-
-  background: #ff7043;
-
-  color: white;
-
-  cursor: pointer;
-
-  font-size: 11px;
-
+.find-partner-form button,
+.partner-chat-form button {
+  padding: 11px 14px;
+  border: 0;
+  border-radius: 9px;
+  background: var(--partner-orange);
+  color: #fff;
+  font-size: 12px;
   font-weight: 700;
-
-  transition: background 0.2s ease;
+  cursor: pointer;
+  transition: background 0.2s ease, opacity 0.2s ease;
 }
 
-
-.message-card button:hover {
-  background: #d85f49;
+.find-partner-form button:hover,
+.partner-chat-form button:hover {
+  background: #e95f35;
 }
 
-
-.message-card button:disabled {
-  opacity: 0.6;
-
+.find-partner-form button:disabled,
+.partner-chat-form button:disabled,
+.request-actions button:disabled {
+  opacity: 0.55;
   cursor: not-allowed;
 }
 
-
-/* =========================================================
-   ENCOURAGEMENT
-   ========================================================= */
-
-.encouragement-card {
-  margin-top: 18px;
-
-  padding: 20px;
-
-  background: #ffede4;
-
-  border-radius: 15px;
-
-  display: flex;
-
-  gap: 15px;
-
-  align-items: flex-start;
-}
-
-
-.encouragement-card > div:first-child {
-  font-size: 25px;
-
-  flex-shrink: 0;
-}
-
-
-.encouragement-card h3 {
-  margin: 0;
-
-  color: #44332d;
-
-  font-size: 14px;
-}
-
-
-.encouragement-card p {
-  margin: 5px 0 0;
-
-  color: #76594f;
-
-  font-size: 11px;
-
+.find-partner-form small {
+  color: var(--partner-muted);
+  font-size: 10px;
   line-height: 1.5;
 }
 
+/* REQUESTS */
 
-/* =========================================================
-   PARTNER NAME BUTTON
-   ========================================================= */
+.partner-requests-card {
+  min-height: 160px;
+}
 
-.partner-name-button {
-  border: none;
+.requests-list {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
 
-  background: transparent;
+.partner-request {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 12px 0;
+  border-bottom: 1px solid #f2e7e2;
+}
 
-  padding: 0;
+.partner-request:last-child {
+  border-bottom: 0;
+}
 
-  margin: 0;
-
-  font: inherit;
-
+.request-avatar {
+  display: flex;
+  width: 38px;
+  height: 38px;
+  flex-shrink: 0;
+  align-items: center;
+  justify-content: center;
+  border-radius: 50%;
+  background: #f5c5b0;
+  color: #704438;
+  font-size: 14px;
   font-weight: 700;
+}
 
-  color: #3e2b25;
+.request-info {
+  display: flex;
+  flex: 1;
+  min-width: 0;
+  flex-direction: column;
+  gap: 4px;
+}
 
+.request-info strong {
+  color: #302522;
+  font-size: 12px;
+}
+
+.request-info span,
+.request-info small {
+  overflow-wrap: anywhere;
+  color: #8c7b74;
+  font-size: 10px;
+}
+
+.request-actions {
+  display: flex;
+  flex-shrink: 0;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.request-actions button {
+  padding: 6px 9px;
+  border: 0;
+  border-radius: 7px;
+  font-size: 10px;
+  font-weight: 700;
   cursor: pointer;
-
-  text-align: left;
 }
 
-
-.partner-name-button:hover {
-  color: #d56c47;
+.accept-request-btn {
+  background: #e5f3e4;
+  color: #2f7836;
 }
 
+.reject-request-btn {
+  background: #fbe8e4;
+  color: #ad4a3b;
+}
 
-/* =========================================================
-   LOADING STATE
-   ========================================================= */
+/* EMPTY STATES */
 
-.partner-empty-state {
-  background: #ffffff;
-
-  border: 1px solid #f0e5e0;
-
-  border-radius: 15px;
-
-  padding: 40px;
-
+.partner-empty-goals {
+  padding: 20px 5px 8px;
   text-align: center;
-
-  box-shadow:
-    0 3px 14px rgba(90, 58, 45, 0.035);
 }
 
+.partner-empty-goals h3 {
+  margin-bottom: 7px;
+  color: #4b3831;
+  font-size: 13px;
+}
 
-.partner-empty-state h2 {
-  margin: 0;
+.partner-empty-goals p {
+  color: #8c7b74;
+  font-size: 11px;
+  line-height: 1.6;
+}
 
-  color: #5b4841;
+.partner-empty-selection {
+  display: flex;
+  min-height: 300px;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 35px;
+  border: 1px solid var(--partner-border);
+  border-radius: 15px;
+  background: #fff;
+  text-align: center;
+}
 
+.partner-empty-selection > span {
+  margin-bottom: 12px;
+  font-size: 40px;
+}
+
+.partner-empty-selection h2 {
+  margin-bottom: 8px;
+  color: #302522;
+  font-size: 19px;
+}
+
+.partner-empty-selection p {
+  max-width: 340px;
+  color: var(--partner-muted);
+  font-size: 12px;
+  line-height: 1.6;
+}
+
+/* QUOTE */
+
+.partner-quote-card {
+  display: flex;
+  min-height: 190px;
+  flex-direction: column;
+  justify-content: space-between;
+  gap: 20px;
+  border-color: #f2d4c7;
+  background: #ffede4;
+}
+
+.quote-badge {
+  color: #c65d3b;
+  font-size: 10px;
+  font-weight: 800;
+  letter-spacing: 1.2px;
+}
+
+.quote-text {
+  margin: auto 0;
+  color: #3b2823;
+  font-size: 15px;
+  font-style: italic;
+  line-height: 1.6;
+}
+
+.quote-author {
+  color: #8c675b;
+  font-size: 11px;
+  font-weight: 700;
+  text-align: right;
+}
+
+/* SELECTED PARTNER PROFILE */
+
+.partner-profile-card {
+  display: flex;
+  align-items: center;
+  gap: 20px;
+  padding: 24px;
+  border-radius: 15px;
+  background: var(--partner-brown);
+  color: #fff;
+}
+
+.large-partner-avatar {
+  display: flex;
+  width: 76px;
+  height: 76px;
+  flex-shrink: 0;
+  align-items: center;
+  justify-content: center;
+  border-radius: 50%;
+  background: #f1b59c;
+  color: #704438;
+  font-size: 26px;
+  font-weight: 700;
+}
+
+.partner-info {
+  flex: 1;
+  min-width: 0;
+}
+
+.online-badge {
+  color: #b8e1ad;
+  font-size: 10px;
+  font-weight: 600;
+}
+
+.partner-info h2 {
+  margin: 6px 0 4px;
+  overflow-wrap: anywhere;
+  color: #fff;
+  font-size: 22px;
+}
+
+.partner-info > p {
+  margin: 5px 0;
+  overflow-wrap: anywhere;
+  color: #d8c4bc;
+  font-size: 11px;
+  line-height: 1.5;
+}
+
+.partner-info > p strong {
+  color: #fff;
+}
+
+.partner-stats {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 20px 30px;
+  margin-top: 16px;
+}
+
+.partner-stats div {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.partner-stats strong {
+  color: #ffab89;
   font-size: 17px;
 }
 
-
-/* =========================================================
-   RESPONSIVE
-   ========================================================= */
-
-@media (max-width: 1100px) {
-
-  .partner-main {
-    padding: 30px;
-  }
-
-  .find-partner-form {
-    grid-template-columns: 1fr 1fr;
-  }
-
-  .find-partner-form button {
-    grid-column: 1 / 3;
-  }
+.partner-stats span {
+  color: #c8b2aa;
+  font-size: 9px;
 }
 
+/* PARTNER GOALS */
 
-/* =========================================================
-   TABLET
-   ========================================================= */
+.partner-goal {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto;
+  align-items: center;
+  gap: 8px 12px;
+  margin-top: 15px;
+  padding-bottom: 14px;
+  border-bottom: 1px solid #f2e7e2;
+}
 
-@media (max-width: 850px) {
+.partner-goal:last-child {
+  border-bottom: 0;
+}
 
-  .partner-sidebar {
-    width: 200px;
+.partner-goal-copy {
+  min-width: 0;
+}
 
-    min-width: 200px;
+.partner-goal h3 {
+  margin: 0;
+  overflow-wrap: anywhere;
+  color: #40302a;
+  font-size: 13px;
+}
 
-    padding: 28px 15px;
-  }
+.partner-goal p {
+  margin: 4px 0 0;
+  color: #8d7c75;
+  font-size: 11px;
+  line-height: 1.5;
+}
 
+.partner-goal > strong {
+  color: #ff6333;
+  font-size: 13px;
+}
 
-  .partner-logo {
-    font-size: 21px;
+.partner-bar {
+  grid-column: 1 / -1;
+  width: 100%;
+  height: 7px;
+  overflow: hidden;
+  margin-top: 2px;
+  border-radius: 10px;
+  background: #eee5e1;
+}
 
-    padding: 0 8px;
-  }
+.partner-bar div {
+  height: 100%;
+  border-radius: inherit;
+  background: var(--partner-orange);
+  transition: width 0.25s ease;
+}
 
+.partner-goal small {
+  grid-column: 1 / -1;
+  color: #8d7c75;
+  font-size: 10px;
+}
 
-  .partner-sidebar nav a {
-    font-size: 14px;
-  }
+/* CHAT */
 
+.partner-messages {
+  display: flex;
+  min-height: 140px;
+  max-height: 300px;
+  flex-direction: column;
+  gap: 9px;
+  overflow-y: auto;
+  margin-top: 15px;
+  padding: 12px;
+  border: 1px solid #f3e8e3;
+  border-radius: 10px;
+  background: #fffbf9;
+}
 
+.no-messages {
+  margin: auto;
+  padding: 20px 8px;
+  color: #8c7b74;
+  font-size: 12px;
+  text-align: center;
+}
+
+.message-bubble {
+  max-width: 82%;
+  padding: 10px 12px;
+  border-radius: 12px;
+  overflow-wrap: anywhere;
+  font-size: 12px;
+  line-height: 1.5;
+}
+
+.message-bubble p {
+  margin: 0;
+  white-space: pre-wrap;
+}
+
+.message-bubble small {
+  display: block;
+  margin-top: 5px;
+  font-size: 9px;
+  opacity: 0.75;
+}
+
+.message-bubble.received {
+  align-self: flex-start;
+  background: #f5ebe6;
+  color: #4d3932;
+}
+
+.message-bubble.sent {
+  align-self: flex-end;
+  background: var(--partner-orange);
+  color: #fff;
+}
+
+.partner-chat-form {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.message-card textarea {
+  width: 100%;
+  min-height: 75px;
+  resize: vertical;
+  margin-top: 12px;
+  padding: 11px 12px;
+  border: 1px solid #eadbd2;
+  border-radius: 9px;
+  background: #fff8f5;
+  color: var(--partner-text);
+  outline: none;
+  font-size: 12px;
+  line-height: 1.5;
+}
+
+.partner-chat-form button {
+  width: 100%;
+}
+
+.encouragement-card {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  padding: 18px;
+  border: 1px solid #f2d4c7;
+  border-radius: 15px;
+  background: #ffede4;
+}
+
+.encouragement-icon {
+  flex-shrink: 0;
+  font-size: 28px;
+}
+
+.encouragement-card h3 {
+  margin-bottom: 5px;
+  color: #4b3028;
+  font-size: 13px;
+}
+
+.encouragement-card p {
+  color: #8c675b;
+  font-size: 11px;
+  line-height: 1.6;
+}
+
+/* RESPONSIVE: TABLETS */
+
+@media (max-width: 1150px) {
   .partner-main {
-    margin-left: 200px;
-
-    padding: 28px 22px;
+    padding: 30px 24px 40px;
   }
 
+  .partner-workspace-grid {
+    grid-template-columns: minmax(260px, 320px) minmax(0, 1fr);
+    gap: 18px;
+  }
+
+  .connected-partners-card,
+  .find-partner-card,
+  .partner-requests-card,
+  .partner-quote-card,
+  .partner-progress-card,
+  .message-card {
+    padding: 19px;
+  }
 
   .partner-profile-card {
     align-items: flex-start;
-  }
-
-
-  .partner-stats {
-    gap: 25px;
+    padding: 20px;
   }
 }
 
-
-/* =========================================================
-   MOBILE
-   ========================================================= */
-
-@media (max-width: 650px) {
-
-  .partner-page {
-    width: 100%;
-  }
-
-
+@media (max-width: 900px) {
   .partner-sidebar {
-    position: relative;
-
-    left: auto;
-    top: auto;
-    bottom: auto;
-
-    width: 100%;
-
-    min-width: 0;
-    min-height: auto;
-
-    padding: 15px;
+    width: 200px;
+    min-width: 200px;
+    padding: 25px 12px 20px;
   }
-
 
   .partner-logo {
-    margin-bottom: 15px;
-
-    padding: 0 5px;
+    margin-bottom: 32px;
+    font-size: 21px;
   }
-
-
-  .partner-sidebar nav {
-    flex-direction: row;
-
-    overflow-x: auto;
-
-    gap: 6px;
-  }
-
 
   .partner-sidebar nav a {
-    min-width: max-content;
-
-    min-height: 45px;
-
-    justify-content: center;
-
-    padding: 0 13px;
-
+    padding: 0 12px;
     font-size: 12px;
   }
 
+  .partner-main {
+    margin-left: 200px;
+    padding: 25px 18px 35px;
+  }
 
+  .partner-workspace-grid {
+    grid-template-columns: minmax(0, 1fr);
+  }
+
+  .partner-left-col,
+  .partner-right-col {
+    gap: 16px;
+  }
+}
+
+/* RESPONSIVE: PHONES */
+
+@media (max-width: 600px) {
+  .partner-page {
+    display: block;
+  }
+
+  .partner-sidebar {
+    position: sticky;
+    top: 0;
+    z-index: 30;
+    width: 100%;
+    min-width: 0;
+    min-height: auto;
+    padding: 12px 14px;
+  }
+
+  .partner-logo {
+    margin: 0 0 12px;
+    padding: 0 4px;
+    font-size: 20px;
+  }
+
+  .partner-logo span {
+    width: 30px;
+    height: 30px;
+  }
+
+  .partner-sidebar nav {
+    display: grid;
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+    gap: 5px;
+  }
+
+  .partner-sidebar nav a {
+    min-height: 42px;
+    justify-content: center;
+    padding: 5px;
+    font-size: 10px;
+    text-align: center;
+  }
+
+  .partner-sidebar-tip,
   .partner-logout {
     display: none;
   }
 
-
   .partner-main {
     width: 100%;
-
+    min-height: auto;
     margin-left: 0;
-
-    padding: 22px 15px 35px;
+    padding: 23px 14px 30px;
   }
-
 
   .partner-page-header h1 {
     font-size: 25px;
   }
 
-
   .partner-page-header span {
     font-size: 12px;
   }
 
+  .partner-workspace-grid {
+    gap: 15px;
+  }
 
   .connected-partners-card,
   .find-partner-card,
   .partner-requests-card,
+  .partner-quote-card,
   .partner-progress-card,
   .message-card {
-    padding: 18px;
+    padding: 16px;
+    border-radius: 12px;
   }
 
-
-  .connected-partner-item {
-    align-items: flex-start;
-
-    padding: 13px;
+  .partner-section-title h2 {
+    font-size: 17px;
   }
-
-
-  .connected-partner-stats {
-    align-items: flex-end;
-  }
-
-
-  .find-partner-form {
-    grid-template-columns: 1fr;
-  }
-
-
-  .find-partner-form button {
-    grid-column: auto;
-  }
-
-
-  .partner-request {
-    align-items: flex-start;
-
-    flex-wrap: wrap;
-  }
-
-
-  .request-actions {
-    width: 100%;
-
-    margin-left: 60px;
-  }
-
 
   .partner-profile-card {
     flex-direction: column;
-
-    text-align: center;
-
-    align-items: center;
-
-    padding: 25px 18px;
+    gap: 14px;
+    padding: 18px;
   }
-
-
-  .partner-info {
-    width: 100%;
-  }
-
-
-  .partner-stats {
-    justify-content: center;
-
-    gap: 25px;
-  }
-
-
-  .partner-goal {
-    grid-template-columns: 1fr auto;
-  }
-
-
-  .message-bubble {
-    max-width: 88%;
-  }
-}
-
-
-/* =========================================================
-   SMALL PHONES
-   ========================================================= */
-
-@media (max-width: 480px) {
-
-  .partner-main {
-    padding: 18px 10px 25px;
-  }
-
-
-  .partner-page-header h1 {
-    font-size: 22px;
-  }
-
-
-  .partner-page-header p {
-    font-size: 9px;
-  }
-
-
-  .partner-page-header span {
-    font-size: 11px;
-  }
-
-
-  .connected-partners-card,
-  .find-partner-card,
-  .partner-requests-card,
-  .partner-progress-card,
-  .message-card {
-    padding: 15px;
-  }
-
-
-  .connected-partner-item {
-    gap: 10px;
-  }
-
-
-  .partner-avatar-small {
-    width: 40px;
-    height: 40px;
-
-    font-size: 16px;
-  }
-
-
-  .connected-partner-info strong {
-    font-size: 13px;
-  }
-
-
-  .connected-partner-info span {
-    font-size: 10px;
-  }
-
-
-  .connected-partner-stats {
-    display: none;
-  }
-
-
-  .partner-stats {
-    gap: 18px;
-  }
-
-
-  .partner-stats strong {
-    font-size: 16px;
-  }
-
 
   .large-partner-avatar {
-    width: 70px;
-    height: 70px;
-
-    font-size: 24px;
+    width: 58px;
+    height: 58px;
+    font-size: 22px;
   }
-
 
   .partner-info h2 {
     font-size: 20px;
   }
 
+  .partner-stats {
+    gap: 16px 24px;
+  }
+
+  .partner-request {
+    align-items: flex-start;
+    flex-wrap: wrap;
+  }
+
+  .request-info {
+    flex-basis: calc(100% - 55px);
+  }
 
   .request-actions {
-    margin-left: 0;
+    width: 100%;
+    flex-direction: row;
+    padding-left: 48px;
   }
 
-
-  .accept-request-btn,
-  .reject-request-btn {
+  .request-actions button {
     flex: 1;
+    padding: 9px;
+  }
+
+  .connected-partner-item {
+    gap: 8px;
+    padding: 10px;
+  }
+
+  .connected-partner-stats {
+    gap: 4px;
+  }
+
+  .connected-badge {
+    padding: 4px 5px;
+    font-size: 8px;
+  }
+
+  .partner-empty-selection {
+    min-height: 230px;
+    padding: 24px;
   }
 }
 
-
-/* =========================================================
-   GLOBAL WIDTH FIX
-   ========================================================= */
-
-html,
-body {
-  margin: 0;
-  padding: 0;
-
-  width: 100%;
-  max-width: 100%;
-
-  overflow-x: hidden;
+@media (prefers-reduced-motion: reduce) {
+  .partner-page *,
+  .partner-page *::before,
+  .partner-page *::after {
+    scroll-behavior: auto !important;
+    transition: none !important;
+  }
 }
 
+/* =========================================
+   SAATHI PARTNER PAGE — DARK MODE
+   ========================================= */
 
-#root {
-  width: 100%;
-  max-width: 100%;
+:root[data-theme="dark"] .partner-page {
+  background: var(--app-bg, #191514);
+  color: var(--app-text, #f5e8df);
 
-  margin: 0;
-  padding: 0;
+  --partner-bg: #191514;
+  --partner-text: #f5e8df;
+  --partner-muted: #c4ada1;
+  --partner-brown: #f5e8df;
+  --partner-orange: #ff8966;
+  --partner-border: #493832;
+}
+
+/* Main cards */
+:root[data-theme="dark"] .partner-page .connected-partners-card,
+:root[data-theme="dark"] .partner-page .find-partner-card,
+:root[data-theme="dark"] .partner-page .partner-requests-card,
+:root[data-theme="dark"] .partner-page .partner-progress-card,
+:root[data-theme="dark"] .partner-page .message-card,
+:root[data-theme="dark"] .partner-page .partner-profile-card,
+:root[data-theme="dark"] .partner-page .partner-messages,
+:root[data-theme="dark"] .partner-page .partner-goal,
+:root[data-theme="dark"] .partner-page .partner-card {
+  background: var(--app-surface, #261f1d) !important;
+  color: var(--app-text, #f5e8df) !important;
+  border-color: var(--app-border, #493832) !important;
+  box-shadow: none;
+}
+
+/* Nested cards and list items */
+:root[data-theme="dark"] .partner-page .partner-list-item,
+:root[data-theme="dark"] .partner-page .partner-item,
+:root[data-theme="dark"] .partner-page .request-item,
+:root[data-theme="dark"] .partner-page .message-item,
+:root[data-theme="dark"] .partner-page .goal-item {
+  background: #211a18;
+  color: var(--app-text, #f5e8df);
+  border-color: var(--app-border, #493832);
+}
+
+/* Headings and normal text */
+:root[data-theme="dark"] .partner-page h1,
+:root[data-theme="dark"] .partner-page h2,
+:root[data-theme="dark"] .partner-page h3,
+:root[data-theme="dark"] .partner-page h4,
+:root[data-theme="dark"] .partner-page p,
+:root[data-theme="dark"] .partner-page span,
+:root[data-theme="dark"] .partner-page label,
+:root[data-theme="dark"] .partner-page strong,
+:root[data-theme="dark"] .partner-page small {
+  color: var(--app-text, #f5e8df);
+}
+
+/* Secondary text */
+:root[data-theme="dark"] .partner-page .muted,
+:root[data-theme="dark"] .partner-page .partner-muted,
+:root[data-theme="dark"] .partner-page .subtitle,
+:root[data-theme="dark"] .partner-page .description {
+  color: var(--app-muted, #c4ada1);
+}
+
+/* Form controls */
+:root[data-theme="dark"] .partner-page input,
+:root[data-theme="dark"] .partner-page textarea,
+:root[data-theme="dark"] .partner-page select {
+  background: var(--app-input-bg, #211a18);
+  color: var(--app-text, #f5e8df);
+  border-color: var(--app-border, #493832);
+}
+
+:root[data-theme="dark"] .partner-page input::placeholder,
+:root[data-theme="dark"] .partner-page textarea::placeholder {
+  color: #a99489;
+}
+
+/* Quote or encouragement card */
+:root[data-theme="dark"] .partner-page .partner-quote-card {
+  background: #30221e;
+  color: #f5e8df;
+  border-color: #604137;
+}
+
+/* Progress track */
+:root[data-theme="dark"] .partner-page .progress-track,
+:root[data-theme="dark"] .partner-page .progress-bar-bg {
+  background: #493832;
+}
+
+/* Buttons */
+:root[data-theme="dark"] .partner-page button {
+  color: var(--app-text, #f5e8df);
+}
+
+:root[data-theme="dark"] .partner-page button:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+/* Links */
+:root[data-theme="dark"] .partner-page a {
+  color: #ff9877;
+}
+
+/* Dividers */
+:root[data-theme="dark"] .partner-page hr {
+  border-color: var(--app-border, #493832);
 }

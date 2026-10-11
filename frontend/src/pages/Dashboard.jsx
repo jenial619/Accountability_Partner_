@@ -505,7 +505,8 @@ function Dashboard() {
       <aside className="sidebar">
 
         <div className="sidebar-logo">
-          ◉ Saathi
+          <span className="sidebar-logo-icon">◉</span>
+          <span>Saathi</span>
         </div>
 
         <nav className="sidebar-nav">
@@ -515,7 +516,7 @@ function Dashboard() {
             className="active"
           >
             <span className="sidebar-nav-icon">
-              ⌂ 
+              🏠 
             </span>
             Dashboard
           </Link>

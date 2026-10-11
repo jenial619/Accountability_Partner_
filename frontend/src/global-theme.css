@@ -1,0 +1,124 @@
+
+/* Global Saathi theme */
+:root {
+  color-scheme: light;
+  --app-bg: #fff8f0;
+  --app-surface: #fffdfb;
+  --app-text: #3e2b25;
+  --app-muted: #80675d;
+  --app-border: #eeddd1;
+  --app-input-bg: #fff8ef;
+  --app-primary: #a83f32;
+}
+
+:root[data-theme="dark"] {
+  color-scheme: dark;
+  --app-bg: #191514;
+  --app-surface: #261f1d;
+  --app-text: #f5e8df;
+  --app-muted: #c4ada1;
+  --app-border: #493832;
+  --app-input-bg: #211a18;
+  --app-primary: #a83f32;
+}
+
+html,
+body,
+#root {
+  min-height: 100%;
+  margin: 0;
+}
+
+body {
+  background: var(--app-bg);
+  color: var(--app-text);
+  transition: background 0.25s ease, color 0.25s ease;
+}
+
+/* Common page backgrounds */
+:root[data-theme="dark"] body,
+:root[data-theme="dark"] main,
+:root[data-theme="dark"] .dashboard-page,
+:root[data-theme="dark"] .dashboard-main,
+:root[data-theme="dark"] .goals-page,
+:root[data-theme="dark"] .goals-main,
+:root[data-theme="dark"] .profile-page,
+:root[data-theme="dark"] .profile-main,
+:root[data-theme="dark"] .partner-page,
+:root[data-theme="dark"] .partners-page,
+:root[data-theme="dark"] .page-container {
+  background-color: var(--app-bg);
+  color: var(--app-text);
+}
+
+/* Common cards and content panels */
+:root[data-theme="dark"] .dashboard-card,
+:root[data-theme="dark"] .goal-card,
+:root[data-theme="dark"] .dashboard-goal-card,
+:root[data-theme="dark"] .goal-detail-card,
+:root[data-theme="dark"] .goals-summary,
+:root[data-theme="dark"] .panel-card,
+:root[data-theme="dark"] .focus-card,
+:root[data-theme="dark"] .profile-card,
+:root[data-theme="dark"] .preferences-card,
+:root[data-theme="dark"] .partner-card,
+:root[data-theme="dark"] .stat-card,
+:root[data-theme="dark"] .modal-content {
+  background-color: var(--app-surface);
+  color: var(--app-text);
+  border-color: var(--app-border);
+}
+
+/* Common headings and descriptions */
+:root[data-theme="dark"] h1,
+:root[data-theme="dark"] h2,
+:root[data-theme="dark"] h3,
+:root[data-theme="dark"] h4,
+:root[data-theme="dark"] .dashboard-title,
+:root[data-theme="dark"] .goal-title {
+  color: var(--app-text);
+}
+
+:root[data-theme="dark"] p,
+:root[data-theme="dark"] label,
+:root[data-theme="dark"] .subtitle,
+:root[data-theme="dark"] .description,
+:root[data-theme="dark"] .muted-text {
+  color: var(--app-muted);
+}
+
+/* Forms */
+:root[data-theme="dark"] input,
+:root[data-theme="dark"] textarea,
+:root[data-theme="dark"] select {
+  background-color: var(--app-input-bg);
+  color: var(--app-text);
+  border-color: var(--app-border);
+}
+
+:root[data-theme="dark"] input::placeholder,
+:root[data-theme="dark"] textarea::placeholder {
+  color: var(--app-muted);
+}
+
+/* Tables and dividers */
+:root[data-theme="dark"] table,
+:root[data-theme="dark"] th,
+:root[data-theme="dark"] td {
+  border-color: var(--app-border);
+  color: var(--app-text);
+}
+
+/* Keep the Saathi sidebar and terracotta buttons consistent */
+:root[data-theme="dark"] .profile-sidebar,
+:root[data-theme="dark"] .dashboard-sidebar {
+  background-color: #533a35;
+}
+
+:root[data-theme="dark"] .profile-navigation a.active,
+:root[data-theme="dark"] .dashboard-sidebar a.active,
+:root[data-theme="dark"] .add-goal-btn,
+:root[data-theme="dark"] .create-goal-btn {
+  background-color: var(--app-primary);
+  color: #fff;
+}

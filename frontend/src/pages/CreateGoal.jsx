@@ -140,15 +140,11 @@ function CreateGoal() {
 
 
         <div className="create-heading">
-
           <p>NEW GOAL</p>
-
           <h1>Create a Goal</h1>
-
           <span>
-            Set a goal and make yourself accountable.
+            Turn your intentions into action, one small step at a time.
           </span>
-
         </div>
 
 

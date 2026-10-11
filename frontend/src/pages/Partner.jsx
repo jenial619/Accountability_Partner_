@@ -1,6 +1,8 @@
-import { useEffect, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import "./Partner.css";
+
+const API_URL = "http://127.0.0.1:8000";
 
 function Partner() {
   const navigate = useNavigate();
@@ -8,1557 +10,707 @@ function Partner() {
   const [partners, setPartners] = useState([]);
   const [myGoals, setMyGoals] = useState([]);
   const [partnerRequests, setPartnerRequests] = useState([]);
-
   const [selectedGoalId, setSelectedGoalId] = useState("");
   const [partnerUserId, setPartnerUserId] = useState("");
-
   const [selectedPartner, setSelectedPartner] = useState(null);
   const [partnerGoals, setPartnerGoals] = useState([]);
-
   const [partnerStreaks, setPartnerStreaks] = useState({});
-
   const [messages, setMessages] = useState([]);
   const [messageText, setMessageText] = useState("");
-
+  const [search, setSearch] = useState("");
   const [loading, setLoading] = useState(true);
   const [sendingRequest, setSendingRequest] = useState(false);
   const [sendingMessage, setSendingMessage] = useState(false);
+  const [pageError, setPageError] = useState("");
+  const [actionLoading, setActionLoading] = useState(null);
 
+  const token = () => localStorage.getItem("access_token");
 
-  // =========================================================
-  // TOKEN
-  // =========================================================
+  const request = useCallback(async (path, options = {}) => {
+    const accessToken = token();
 
-  const getToken = () => {
-    return localStorage.getItem("access_token");
-  };
-
-
-  // =========================================================
-  // FETCH MY GOALS
-  // =========================================================
-
-  const fetchMyGoals = async () => {
-    const token = getToken();
-
-    if (!token) {
+    if (!accessToken) {
       navigate("/login");
-      return;
+      throw new Error("Please log in to continue.");
     }
 
-    try {
-      const response = await fetch(
-        "http://127.0.0.1:8000/goals/",
-        {
-          headers: {
-            Authorization: `Bearer ${token}`,
-          },
-        }
+    const response = await fetch(`${API_URL}${path}`, {
+      ...options,
+      headers: {
+        ...(options.headers || {}),
+        Authorization: `Bearer ${accessToken}`,
+      },
+    });
+
+    const data = await response.json().catch(() => null);
+
+    if (response.status === 401) {
+      localStorage.removeItem("access_token");
+      navigate("/login");
+      throw new Error("Your session expired. Please log in again.");
+    }
+
+    if (!response.ok) {
+      throw new Error(
+        data?.detail || "The request could not be completed."
       );
+    }
 
-      const data = await response.json();
+    return data;
+  }, [navigate]);
 
-      if (!response.ok) {
-        throw new Error(
-          data.detail || "Failed to fetch goals"
+  const fetchGoals = useCallback(async () => {
+    const data = await request("/goals/");
+    setMyGoals(Array.isArray(data) ? data : []);
+  }, [request]);
+
+  const fetchRequests = useCallback(async () => {
+    const data = await request("/partners/requests");
+    setPartnerRequests(Array.isArray(data) ? data : []);
+  }, [request]);
+
+  const fetchPartners = useCallback(async () => {
+    const data = await request("/partners/my-partners");
+    const list = Array.isArray(data) ? data : data?.partners || [];
+
+    setPartners(list);
+
+    setSelectedPartner((current) => {
+      if (!list.length) return null;
+
+      if (current) {
+        const match = list.find(
+          (partner) =>
+            partner.partnership_id === current.partnership_id
         );
+
+        if (match) return match;
       }
 
-      setMyGoals(
-        Array.isArray(data) ? data : []
-      );
-    } catch (error) {
-      console.error(
-        "Error fetching goals:",
-        error
-      );
+      return list[0];
+    });
 
-      setMyGoals([]);
-    }
-  };
-
-
-  // =========================================================
-  // FETCH CONNECTED PARTNERS
-  // =========================================================
-
-  const fetchPartners = async () => {
-    const token = getToken();
-
-    if (!token) {
-      navigate("/login");
-      return;
-    }
-
-    try {
-      const response = await fetch(
-        "http://127.0.0.1:8000/partners/my-partners",
-        {
-          headers: {
-            Authorization: `Bearer ${token}`,
-          },
-        }
-      );
-
-      const data = await response.json();
-
-      if (!response.ok) {
-        throw new Error(
-          data.detail ||
-            "Failed to fetch partners"
-        );
-      }
-
-      const partnerList = Array.isArray(data)
-        ? data
-        : data.partners || [];
-
-      setPartners(partnerList);
-
-
-      // Keep currently selected partner
-      // if they still exist.
-      setSelectedPartner((current) => {
-
-        if (partnerList.length === 0) {
-          return null;
-        }
-
-        if (!current) {
-          return partnerList[0];
-        }
-
-        const existingPartner =
-          partnerList.find(
-            (partner) =>
-              partner.partnership_id ===
-              current.partnership_id
-          );
-
-        return existingPartner ||
-          partnerList[0];
-      });
-
-
-      // =====================================================
-      // FETCH STREAKS
-      // =====================================================
-
-      const streakMap = {};
-
-      for (const partner of partnerList) {
-
+    const streakEntries = await Promise.all(
+      list.map(async (partner) => {
         try {
-
-          const streakResponse =
-            await fetch(
-              `http://127.0.0.1:8000/tasks/partner/${partner.id}/streak`,
-              {
-                headers: {
-                  Authorization:
-                    `Bearer ${token}`,
-                },
-              }
-            );
-
-          if (streakResponse.ok) {
-
-            const streakData =
-              await streakResponse.json();
-
-            streakMap[partner.id] =
-              streakData.streak || 0;
-
-          } else {
-
-            streakMap[partner.id] = 0;
-
-          }
-
-        } catch (error) {
-
-          console.error(
-            "Error fetching streak:",
-            error
+          const streakData = await request(
+            `/tasks/partner/${partner.id}/streak`
           );
 
-          streakMap[partner.id] = 0;
+          return [partner.id, Number(streakData?.streak || 0)];
+        } catch {
+          return [partner.id, 0];
         }
-      }
+      })
+    );
 
-      setPartnerStreaks(streakMap);
+    setPartnerStreaks(Object.fromEntries(streakEntries));
+  }, [request]);
 
-    } catch (error) {
-
-      console.error(
-        "Error fetching partners:",
-        error
-      );
-
-      setPartners([]);
-      setSelectedPartner(null);
-    }
-  };
-
-
-  // =========================================================
-  // FETCH INCOMING REQUESTS
-  // =========================================================
-
-  const fetchPartnerRequests = async () => {
-
-    const token = getToken();
-
-    if (!token) {
-      navigate("/login");
-      return;
-    }
-
-    try {
-
-      const response = await fetch(
-        "http://127.0.0.1:8000/partners/requests",
-        {
-          headers: {
-            Authorization:
-              `Bearer ${token}`,
-          },
-        }
-      );
-
-      const data = await response.json();
-
-      if (!response.ok) {
-        throw new Error(
-          data.detail ||
-            "Failed to fetch requests"
-        );
-      }
-
-      setPartnerRequests(
-        Array.isArray(data)
-          ? data
-          : []
-      );
-
-    } catch (error) {
-
-      console.error(
-        "Error fetching requests:",
-        error
-      );
-
-      setPartnerRequests([]);
-    }
-  };
-
-
-  // =========================================================
-  // FETCH SELECTED PARTNER'S GOALS
-  // =========================================================
-
-  const fetchPartnerGoals = async (
-    partnerId
-  ) => {
-
-    const token = getToken();
-
-    if (!token || !partnerId) {
+  const fetchPartnerDetails = useCallback(async (partnerId) => {
+    if (!partnerId) {
       setPartnerGoals([]);
+      setMessages([]);
       return;
     }
 
-    try {
+    const [goalsResult, messagesResult] = await Promise.allSettled([
+      request(`/partners/partner/${partnerId}/goals`),
+      request(`/messages/partner/${partnerId}`),
+    ]);
 
-      const response = await fetch(
-        `http://127.0.0.1:8000/partners/partner/${partnerId}/goals`,
-        {
-          headers: {
-            Authorization:
-              `Bearer ${token}`,
-          },
-        }
-      );
-
-      const data = await response.json();
-
-      if (!response.ok) {
-        throw new Error(
-          data.detail ||
-            "Failed to fetch partner goals"
-        );
-      }
-
+    if (goalsResult.status === "fulfilled") {
+      const data = goalsResult.value;
       setPartnerGoals(
-        Array.isArray(data)
-          ? data
-          : data.goals || []
+        Array.isArray(data) ? data : data?.goals || []
       );
-
-    } catch (error) {
-
-      console.error(
-        "Error fetching partner goals:",
-        error
-      );
-
+    } else {
       setPartnerGoals([]);
+      console.error("Unable to fetch partner goals:", goalsResult.reason);
     }
-  };
 
-
-  // =========================================================
-  // FETCH MESSAGES FOR SELECTED PARTNER
-  // =========================================================
-
-  const fetchMessages = async (
-    partnerId
-  ) => {
-
-    const token = getToken();
-
-    if (!token || !partnerId) {
+    if (messagesResult.status === "fulfilled") {
+      const data = messagesResult.value;
+      setMessages(Array.isArray(data) ? data : []);
+    } else {
       setMessages([]);
-      return;
+      console.error("Unable to fetch messages:", messagesResult.reason);
     }
-
-    try {
-
-      const response = await fetch(
-        `http://127.0.0.1:8000/messages/partner/${partnerId}`,
-        {
-          headers: {
-            Authorization:
-              `Bearer ${token}`,
-          },
-        }
-      );
-
-      const data = await response.json();
-
-      if (!response.ok) {
-        setMessages([]);
-        return;
-      }
-
-      setMessages(
-        Array.isArray(data)
-          ? data
-          : []
-      );
-
-    } catch (error) {
-
-      console.error(
-        "Error fetching messages:",
-        error
-      );
-
-      setMessages([]);
-    }
-  };
-
-
-  // =========================================================
-  // INITIAL LOAD
-  // =========================================================
+  }, [request]);
 
   useEffect(() => {
+    let cancelled = false;
 
-    const loadData = async () => {
-
-      const token = getToken();
-
-      if (!token) {
+    async function loadPage() {
+      if (!token()) {
         navigate("/login");
         return;
       }
 
       setLoading(true);
+      setPageError("");
 
-      await Promise.all([
-        fetchMyGoals(),
+      const results = await Promise.allSettled([
+        fetchGoals(),
         fetchPartners(),
-        fetchPartnerRequests(),
+        fetchRequests(),
       ]);
 
+      if (cancelled) return;
+
+      const failed = results.find((result) => result.status === "rejected");
+
+      if (failed) {
+        setPageError(failed.reason?.message || "Unable to load partner data.");
+      }
+
       setLoading(false);
+    }
+
+    loadPage();
+
+    return () => {
+      cancelled = true;
     };
-
-    loadData();
-
-  }, [navigate]);
-
-
-  // =========================================================
-  // WHEN SELECTED PARTNER CHANGES
-  // =========================================================
+  }, [fetchGoals, fetchPartners, fetchRequests, navigate]);
 
   useEffect(() => {
+    let cancelled = false;
 
-    if (!selectedPartner) {
+    async function loadSelectedPartner() {
+      if (!selectedPartner) {
+        setPartnerGoals([]);
+        setMessages([]);
+        return;
+      }
 
-      setPartnerGoals([]);
-      setMessages([]);
+      const [goalsResult, messagesResult] = await Promise.allSettled([
+        request(`/partners/partner/${selectedPartner.id}/goals`),
+        request(`/messages/partner/${selectedPartner.id}`),
+      ]);
 
+      if (cancelled) return;
+
+      if (goalsResult.status === "fulfilled") {
+        const data = goalsResult.value;
+        setPartnerGoals(
+          Array.isArray(data) ? data : data?.goals || []
+        );
+      } else {
+        setPartnerGoals([]);
+        console.error(goalsResult.reason);
+      }
+
+      if (messagesResult.status === "fulfilled") {
+        const data = messagesResult.value;
+        setMessages(Array.isArray(data) ? data : []);
+      } else {
+        setMessages([]);
+        console.error(messagesResult.reason);
+      }
+    }
+
+    loadSelectedPartner();
+
+    return () => {
+      cancelled = true;
+    };
+  }, [selectedPartner, request]);
+
+  const handleSendRequest = async (event) => {
+    event.preventDefault();
+    setPageError("");
+
+    const userId = Number(partnerUserId);
+    const goalId = Number(selectedGoalId);
+
+    if (!Number.isInteger(userId) || userId <= 0) {
+      setPageError("Enter a valid partner user ID.");
       return;
     }
 
-    fetchPartnerGoals(
-      selectedPartner.id
-    );
+    if (!Number.isInteger(goalId) || goalId <= 0) {
+      setPageError("Select one of your goals first.");
+      return;
+    }
 
-    fetchMessages(
-      selectedPartner.id
-    );
+    setSendingRequest(true);
 
-  }, [selectedPartner]);
+    try {
+      await request(
+        `/partners/request/${userId}?goal_id=${goalId}`,
+        { method: "POST" }
+      );
 
+      setPartnerUserId("");
+      setSelectedGoalId("");
+      await fetchRequests();
+      alert("Partner request sent successfully.");
+    } catch (error) {
+      setPageError(error.message);
+    } finally {
+      setSendingRequest(false);
+    }
+  };
 
-  // =========================================================
-  // SEND PARTNER REQUEST
-  // =========================================================
+  const handleRequestAction = async (requestId, action) => {
+    setActionLoading(`${requestId}-${action}`);
+    setPageError("");
 
-  const handleSendPartnerRequest =
-    async () => {
+    try {
+      await request(`/partners/${requestId}/${action}`, {
+        method: "PUT",
+      });
 
-      const token = getToken();
+      await fetchRequests();
 
-      if (!token) {
-        navigate("/login");
-        return;
-      }
-
-      if (!partnerUserId.trim()) {
-
-        alert(
-          "Please enter a partner user ID."
-        );
-
-        return;
-      }
-
-      if (!selectedGoalId) {
-
-        alert(
-          "Please select a goal."
-        );
-
-        return;
-      }
-
-      const userId =
-        Number(partnerUserId);
-
-      const goalId =
-        Number(selectedGoalId);
-
-      if (
-        !Number.isInteger(userId) ||
-        userId <= 0
-      ) {
-
-        alert(
-          "Please enter a valid user ID."
-        );
-
-        return;
-      }
-
-      if (
-        !Number.isInteger(goalId) ||
-        goalId <= 0
-      ) {
-
-        alert(
-          "Please select a valid goal."
-        );
-
-        return;
-      }
-
-      setSendingRequest(true);
-
-      try {
-
-        const response =
-          await fetch(
-            `http://127.0.0.1:8000/partners/request/${userId}?goal_id=${goalId}`,
-            {
-              method: "POST",
-              headers: {
-                Authorization:
-                  `Bearer ${token}`,
-              },
-            }
-          );
-
-        const data =
-          await response.json();
-
-        if (!response.ok) {
-
-          throw new Error(
-            data.detail ||
-              "Failed to send request"
-          );
-        }
-
-        alert(
-          "Partner request sent successfully."
-        );
-
-        setPartnerUserId("");
-        setSelectedGoalId("");
-
-        await fetchPartnerRequests();
-
-      } catch (error) {
-
-        console.error(
-          "Error sending request:",
-          error
-        );
-
-        alert(error.message);
-
-      } finally {
-
-        setSendingRequest(false);
-      }
-    };
-
-
-  // =========================================================
-  // ACCEPT REQUEST
-  // =========================================================
-
-  const handleAcceptRequest =
-    async (requestId) => {
-
-      const token = getToken();
-
-      try {
-
-        const response =
-          await fetch(
-            `http://127.0.0.1:8000/partners/${requestId}/accept`,
-            {
-              method: "PUT",
-              headers: {
-                Authorization:
-                  `Bearer ${token}`,
-              },
-            }
-          );
-
-        const data =
-          await response.json();
-
-        if (!response.ok) {
-
-          throw new Error(
-            data.detail ||
-              "Failed to accept request"
-          );
-        }
-
-        alert(
-          "Partner request accepted."
-        );
-
-        await fetchPartnerRequests();
+      if (action === "accept") {
         await fetchPartners();
-
-      } catch (error) {
-
-        console.error(
-          "Error accepting request:",
-          error
-        );
-
-        alert(error.message);
+        alert("Partner request accepted.");
       }
-    };
+    } catch (error) {
+      setPageError(error.message);
+    } finally {
+      setActionLoading(null);
+    }
+  };
 
+  const handleSendMessage = async (event) => {
+    event?.preventDefault();
 
-  // =========================================================
-  // REJECT REQUEST
-  // =========================================================
+    if (!selectedPartner || !messageText.trim()) return;
 
-  const handleRejectRequest =
-    async (requestId) => {
+    setSendingMessage(true);
+    setPageError("");
 
-      const token = getToken();
+    try {
+      await request(
+        `/messages/send?receiver_id=${selectedPartner.id}&content=${encodeURIComponent(
+          messageText.trim()
+        )}`,
+        { method: "POST" }
+      );
 
-      try {
+      setMessageText("");
 
-        const response =
-          await fetch(
-            `http://127.0.0.1:8000/partners/${requestId}/reject`,
-            {
-              method: "PUT",
-              headers: {
-                Authorization:
-                  `Bearer ${token}`,
-              },
-            }
-          );
+      const data = await request(
+        `/messages/partner/${selectedPartner.id}`
+      );
 
-        const data =
-          await response.json();
-
-        if (!response.ok) {
-
-          throw new Error(
-            data.detail ||
-              "Failed to reject request"
-          );
-        }
-
-        await fetchPartnerRequests();
-
-      } catch (error) {
-
-        console.error(
-          "Error rejecting request:",
-          error
-        );
-
-        alert(error.message);
-      }
-    };
-
-
-  // =========================================================
-  // SEND MESSAGE
-  // =========================================================
-
-  const handleSendMessage =
-    async () => {
-
-      const token = getToken();
-
-      if (!selectedPartner) {
-
-        alert(
-          "Please select a partner first."
-        );
-
-        return;
-      }
-
-      if (!messageText.trim()) {
-
-        alert(
-          "Enter a message."
-        );
-
-        return;
-      }
-
-      setSendingMessage(true);
-
-      try {
-
-        const response =
-          await fetch(
-            `http://127.0.0.1:8000/messages/send?receiver_id=${selectedPartner.id}&content=${encodeURIComponent(
-              messageText.trim()
-            )}`,
-            {
-              method: "POST",
-              headers: {
-                Authorization:
-                  `Bearer ${token}`,
-              },
-            }
-          );
-
-        const data =
-          await response.json();
-
-        if (!response.ok) {
-
-          throw new Error(
-            data.detail ||
-              "Failed to send message"
-          );
-        }
-
-        setMessages(
-          (previous) => [
-            ...previous,
-            data,
-          ]
-        );
-
-        setMessageText("");
-
-      } catch (error) {
-
-        console.error(
-          "Error sending message:",
-          error
-        );
-
-        alert(error.message);
-
-      } finally {
-
-        setSendingMessage(false);
-      }
-    };
-
-
-  // =========================================================
-  // MESSAGE ENTER KEY
-  // =========================================================
-
-  const handleMessageKeyDown =
-    (event) => {
-
-      if (
-        event.key === "Enter" &&
-        !event.shiftKey
-      ) {
-
-        event.preventDefault();
-
-        handleSendMessage();
-      }
-    };
-
-
-  // =========================================================
-  // LOGOUT
-  // =========================================================
+      setMessages(Array.isArray(data) ? data : []);
+    } catch (error) {
+      setPageError(error.message);
+    } finally {
+      setSendingMessage(false);
+    }
+  };
 
   const handleLogout = () => {
-
-    localStorage.removeItem(
-      "access_token"
-    );
-
+    localStorage.removeItem("access_token");
     navigate("/login");
   };
 
-
-  // =========================================================
-  // LOADING
-  // =========================================================
-
-  if (loading) {
+  const filteredPartners = partners.filter((partner) => {
+    const searchText = search.toLowerCase();
 
     return (
+      (partner.name || "").toLowerCase().includes(searchText) ||
+      (partner.email || "").toLowerCase().includes(searchText) ||
+      (partner.goal_title || "").toLowerCase().includes(searchText)
+    );
+  });
+
+  const selectedGoalProgress = selectedPartner?.goal_id
+    ? partnerGoals.find(
+        (goal) => Number(goal.id) === Number(selectedPartner.goal_id)
+      )?.progress || 0
+    : 0;
+
+  const isOwnMessage = (message) =>
+    selectedPartner &&
+    Number(message.sender_id) !== Number(selectedPartner.id);
+
+  if (loading) {
+    return (
       <div className="partner-page">
-
         <aside className="partner-sidebar">
-
-          <Link
-            to="/"
-            className="partner-logo"
-          >
-            <span>◉</span>
-            Saathi
+          <Link to="/" className="partner-logo">
+            <span>◉</span> Saathi
           </Link>
-
           <nav>
-
-            <Link to="/dashboard">
-              ⌂ Dashboard
-            </Link>
-
-            <Link to="/goals">
-              🎯 My Goals
-            </Link>
-
-            <Link
-              to="/partners"
-              className="active"
-            >
-              🤝 My Partners
-            </Link>
-
-            <Link to="/profile">
-              👤 Profile
-            </Link>
-
+            <Link to="/dashboard">🏠 Dashboard</Link>
+            <Link to="/goals">🎯 My Goals</Link>
+            <Link to="/partners" className="active">🤝 My Partners</Link>
+            <Link to="/profile">👤 Profile</Link>
           </nav>
-
-          <button
-            onClick={handleLogout}
-            className="partner-logout"
-          >
+          <button onClick={handleLogout} className="partner-logout">
             ↪ Logout
           </button>
-
         </aside>
-
         <main className="partner-main">
-
-          <header className="partner-page-header">
-
-            <div>
-
-              <p>
-                ACCOUNTABILITY
-              </p>
-
-              <h1>
-                My Partners
-              </h1>
-
-              <span>
-                Stay accountable and grow together.
-              </span>
-
-            </div>
-
-          </header>
-
-          <div className="partner-empty-state">
-
-            <h2>
-              Loading partner information...
-            </h2>
-
-          </div>
-
+          <div className="partner-loading">Loading your partner workspace...</div>
         </main>
-
       </div>
     );
   }
 
-
-  // =========================================================
-  // MAIN PAGE
-  // =========================================================
-
   return (
     <div className="partner-page">
-
-      {/* =====================================================
-          SIDEBAR
-      ====================================================== */}
-
       <aside className="partner-sidebar">
-
-        <Link
-          to="/"
-          className="partner-logo"
-        >
-          <span>◉</span>
-          Saathi
+        <Link to="/" className="partner-logo">
+          <span>◉</span> Saathi
         </Link>
 
         <nav>
-
-          <Link to="/dashboard">
-            ⌂ Dashboard
-          </Link>
-
-          <Link to="/goals">
-            🎯 My Goals
-          </Link>
-
-          <Link
-            to="/partners"
-            className="active"
-          >
-            🤝 My Partners
-          </Link>
-
-          <Link to="/profile">
-            👤 Profile
-          </Link>
-
+          <Link to="/dashboard">🏠 Dashboard</Link>
+          <Link to="/goals">🎯 My Goals</Link>
+          <Link to="/partners" className="active">🤝 My Partners</Link>
+          <Link to="/profile">👤 Profile</Link>
         </nav>
 
-        <button
-          onClick={handleLogout}
-          className="partner-logout"
-        >
+        <div className="partner-sidebar-tip">
+          <span>✨</span>
+          <p>Small progress is still progress.</p>
+        </div>
+
+        <button onClick={handleLogout} className="partner-logout">
           ↪ Logout
         </button>
-
       </aside>
 
-
-      {/* =====================================================
-          MAIN
-      ====================================================== */}
-
       <main className="partner-main">
-
         <header className="partner-page-header">
-
-          <div>
-
-            <p>
-              ACCOUNTABILITY
-            </p>
-
-            <h1>
-              My Partners
-            </h1>
-
-            <span>
-              Stay accountable and grow together.
-            </span>
-
-          </div>
-
+          <p>ACCOUNTABILITY NETWORK</p>
+          <h1>My Partners</h1>
+          <span>
+            Stay accountable, celebrate progress, and grow together.
+          </span>
         </header>
 
-
-        {/* ===================================================
-            CONNECTED PARTNERS
-        ==================================================== */}
-
-        <section className="connected-partners-card">
-
-          <div className="partner-section-title">
-
-            <span>
-              YOUR ACCOUNTABILITY PARTNERS
-            </span>
-
-            <h2>
-              Connected Partners
-            </h2>
-
+        {pageError && (
+          <div className="partner-error" role="alert">
+            <span>{pageError}</span>
+            <button type="button" onClick={() => setPageError("")}>×</button>
           </div>
-
-
-          {partners.length === 0 ? (
-
-            <div className="partner-empty-goals">
-
-              <h3>
-                No partners connected yet
-              </h3>
-
-              <p>
-                Send a request below to connect
-                with an accountability partner.
-              </p>
-
-            </div>
-
-          ) : (
-
-            <div className="connected-partners-list">
-
-              {partners.map((partner) => {
-
-                const isSelected =
-                  selectedPartner?.partnership_id ===
-                  partner.partnership_id;
-
-                return (
-                  <button
-                    type="button"
-                    key={partner.partnership_id}
-                    className={
-                      isSelected
-                        ? "connected-partner-item selected"
-                        : "connected-partner-item"
-                    }
-                    onClick={() =>
-                      setSelectedPartner(partner)
-                    }
-                  >
-
-                    <div className="partner-avatar-small">
-
-                      {partner.name
-                        ? partner.name
-                            .charAt(0)
-                            .toUpperCase()
-                        : "P"}
-
-                    </div>
-
-
-                    <div className="connected-partner-info">
-
-                      <strong>
-                        {partner.name}
-                      </strong>
-
-                      <span>
-                        {partner.email}
-                      </span>
-
-                      <small>
-                        🎯{" "}
-                        {partner.goal_title ||
-                          "Accountability Goal"}
-                      </small>
-
-                    </div>
-
-
-                    <div className="connected-partner-stats">
-
-                      <span className="connected-badge">
-                        ● Connected
-                      </span>
-
-                      <strong>
-                        🔥{" "}
-                        {partnerStreaks[
-                          partner.id
-                        ] || 0}
-                      </strong>
-
-                    </div>
-
-                  </button>
-                );
-              })}
-
-            </div>
-          )}
-
-        </section>
-
-
-        {/* ===================================================
-            FIND PARTNER
-        ==================================================== */}
-
-        <section className="find-partner-card">
-
-          <div className="partner-section-title">
-
-            <span>
-              FIND A PARTNER
-            </span>
-
-            <h2>
-              Connect for a specific goal
-            </h2>
-
-          </div>
-
-          <p>
-            Choose one of your goals and enter
-            the user ID of the person you want
-            to connect with.
-          </p>
-
-
-          <div className="find-partner-form">
-
-            <select
-              value={selectedGoalId}
-              onChange={(event) =>
-                setSelectedGoalId(
-                  event.target.value
-                )
-              }
-            >
-
-              <option value="">
-                Select your goal
-              </option>
-
-              {myGoals.map((goal) => (
-
-                <option
-                  key={goal.id}
-                  value={goal.id}
-                >
-                  {goal.title}
-                </option>
-
-              ))}
-
-            </select>
-
-
-            <input
-              type="number"
-              min="1"
-              value={partnerUserId}
-              onChange={(event) =>
-                setPartnerUserId(
-                  event.target.value
-                )
-              }
-              placeholder="Enter partner user ID"
-            />
-
-
-            <button
-              type="button"
-              onClick={
-                handleSendPartnerRequest
-              }
-              disabled={sendingRequest}
-            >
-              {sendingRequest
-                ? "Sending..."
-                : "Send Request →"}
-            </button>
-
-          </div>
-
-        </section>
-
-
-        {/* ===================================================
-            INCOMING REQUESTS
-        ==================================================== */}
-
-        <section className="partner-requests-card">
-
-          <div className="partner-section-title">
-
-            <span>
-              CONNECTION REQUESTS
-            </span>
-
-            <h2>
-              Incoming Requests
-            </h2>
-
-          </div>
-
-
-          {partnerRequests.length === 0 ? (
-
-            <div className="partner-empty-goals">
-
-              <h3>
-                No pending requests
-              </h3>
-
-              <p>
-                New partner requests will
-                appear here.
-              </p>
-
-            </div>
-
-          ) : (
-
-            <div className="requests-list">
-
-              {partnerRequests.map(
-                (request) => (
-
-                  <div
-                    className="partner-request"
-                    key={request.id}
-                  >
-
-                    <div className="request-avatar">
-
-                      {request.name
-                        ? request.name
-                            .charAt(0)
-                            .toUpperCase()
-                        : "U"}
-
-                    </div>
-
-
-                    <div className="request-info">
-
-                      <strong>
-                        {request.name}
-                      </strong>
-
-                      <span>
-                        {request.email}
-                      </span>
-
-                      <small>
-                        🎯 Goal:{" "}
-                        {request.goal_title ||
-                          "Unknown goal"}
-                      </small>
-
-                    </div>
-
-
-                    <div className="request-actions">
-
-                      <button
-                        type="button"
-                        className="accept-request-btn"
-                        onClick={() =>
-                          handleAcceptRequest(
-                            request.id
-                          )
-                        }
-                      >
-                        Accept
-                      </button>
-
-                      <button
-                        type="button"
-                        className="reject-request-btn"
-                        onClick={() =>
-                          handleRejectRequest(
-                            request.id
-                          )
-                        }
-                      >
-                        Reject
-                      </button>
-
-                    </div>
-
-                  </div>
-                )
-              )}
-
-            </div>
-
-          )}
-
-        </section>
-
-
-        {/* ===================================================
-            SELECTED PARTNER PROFILE
-        ==================================================== */}
-
-        {selectedPartner && (
-
-          <>
-
-            <section className="partner-profile-card">
-
-              <div className="large-partner-avatar">
-
-                {selectedPartner.name
-                  ? selectedPartner.name
-                      .charAt(0)
-                      .toUpperCase()
-                  : "P"}
-
-              </div>
-
-
-              <div className="partner-info">
-
-                <span className="online-badge">
-                  ● Connected
-                </span>
-
-                <h2>
-                  {selectedPartner.name}
-                </h2>
-
-                <p>
-                  {selectedPartner.email}
-                </p>
-
-                <p>
-                  🎯 Accountability Goal:{" "}
-                  <strong>
-                    {selectedPartner.goal_title ||
-                      "Not specified"}
-                  </strong>
-                </p>
-
-
-                <div className="partner-stats">
-
-                  <div>
-
-                    <strong>
-
-                      {selectedPartner.goal_id
-                        ? (
-                            partnerGoals.find(
-                              (goal) =>
-                                goal.id ===
-                                selectedPartner.goal_id
-                            )?.progress || 0
-                          )
-                        : 0}
-
-                      %
-
-                    </strong>
-
-                    <span>
-                      Goal Progress
-                    </span>
-
-                  </div>
-
-
-                  <div>
-
-                    <strong>
-                      🔥{" "}
-                      {partnerStreaks[
-                        selectedPartner.id
-                      ] || 0}
-                    </strong>
-
-                    <span>
-                      Day Streak
-                    </span>
-
-                  </div>
-
-
-                  <div>
-
-                    <strong>
-                      🤝
-                    </strong>
-
-                    <span>
-                      Connected
-                    </span>
-
-                  </div>
-
-                </div>
-
-              </div>
-
-            </section>
-
-
-            {/* =================================================
-                PARTNER GOALS
-            ================================================== */}
-
-            <section className="partner-progress-card">
-
-              <div className="partner-section-title">
-
-                <span>
-                  PARTNER'S GOALS
-                </span>
-
-                <h2>
-                  Current Progress
-                </h2>
-
-              </div>
-
-
-              {partnerGoals.length === 0 ? (
-
-                <div className="partner-empty-goals">
-
-                  <h3>
-                    No goals available
-                  </h3>
-
-                  <p>
-                    Your partner has not created
-                    any goals yet.
-                  </p>
-
-                </div>
-
-              ) : (
-
-                <div>
-
-                  {partnerGoals.map(
-                    (goal) => (
-
-                      <div
-                        className="partner-goal"
-                        key={goal.id}
-                      >
-
-                        <div>
-
-                          <h3>
-                            {goal.title}
-                          </h3>
-
-                          <p>
-                            {goal.description ||
-                              "No description provided"}
-                          </p>
-
-                        </div>
-
-
-                        <strong>
-                          {goal.progress || 0}%
-                        </strong>
-
-
-                        <div className="partner-bar">
-
-                          <div
-                            style={{
-                              width:
-                                `${Math.min(
-                                  Math.max(
-                                    goal.progress ||
-                                      0,
-                                    0
-                                  ),
-                                  100
-                                )}%`,
-                            }}
-                          />
-
-                        </div>
-
-
-                        {goal.deadline && (
-
-                          <small>
-                            Deadline:{" "}
-                            {goal.deadline}
-                          </small>
-
-                        )}
-
-                      </div>
-                    )
-                  )}
-
-                </div>
-
-              )}
-
-            </section>
-
-
-            {/* =================================================
-                CHAT
-            ================================================== */}
-
-            <section className="message-card">
-
-              <div className="partner-section-title">
-
-                <span>
-                  STAY CONNECTED
-                </span>
-
-                <h2>
-                  Chat with{" "}
-                  {selectedPartner.name}
-                </h2>
-
-              </div>
-
-
-              <div className="partner-messages">
-
-                {messages.length === 0 ? (
-
-                  <p className="no-messages">
-                    No messages yet.
-                    Start the conversation!
-                  </p>
-
-                ) : (
-
-                  messages.map(
-                    (message) => (
-
-                      <div
-                        key={message.id}
-                        className={
-                          message.sender_id ===
-                          selectedPartner.id
-                            ? "message-bubble received"
-                            : "message-bubble sent"
-                        }
-                      >
-
-                        <p>
-                          {message.content}
-                        </p>
-
-                        <small>
-                          {message.created_at
-                            ? new Date(
-                                message.created_at
-                              ).toLocaleString()
-                            : ""}
-                        </small>
-
-                      </div>
-                    )
-                  )
-                )}
-
-              </div>
-
-
-              <textarea
-                value={messageText}
-                onChange={(event) =>
-                  setMessageText(
-                    event.target.value
-                  )
-                }
-                onKeyDown={
-                  handleMessageKeyDown
-                }
-                placeholder={
-                  "Send some encouragement..."
-                }
-              />
-
-
-              <button
-                type="button"
-                onClick={handleSendMessage}
-                disabled={sendingMessage}
-              >
-                {sendingMessage
-                  ? "Sending..."
-                  : "Send Message →"}
-              </button>
-
-            </section>
-
-
-            {/* =================================================
-                ENCOURAGEMENT
-            ================================================== */}
-
-            <section className="encouragement-card">
-
-              <div>
-                <span>💛</span>
-              </div>
-
-              <div>
-
-                <h3>
-                  Keep each other accountable
-                </h3>
-
-                <p>
-                  Encourage your partners when
-                  they're making progress and
-                  celebrate the small wins together.
-                </p>
-
-              </div>
-
-            </section>
-
-          </>
         )}
 
-      </main>
+        <div className="partner-workspace-grid">
+          <div className="partner-left-col">
+            <section className="connected-partners-card">
+              <div className="partner-section-title">
+                <span>ACTIVE CONNECTIONS</span>
+                <h2>Partners ({filteredPartners.length})</h2>
+              </div>
 
+              <input
+                className="partner-search-input"
+                type="search"
+                placeholder="Search partner or goal..."
+                value={search}
+                onChange={(event) => setSearch(event.target.value)}
+              />
+
+              <div className="connected-partners-list">
+                {filteredPartners.map((partner) => {
+                  const selected =
+                    selectedPartner?.partnership_id === partner.partnership_id;
+
+                  return (
+                    <button
+                      type="button"
+                      key={partner.partnership_id}
+                      className={`connected-partner-item ${
+                        selected ? "selected" : ""
+                      }`}
+                      onClick={() => setSelectedPartner(partner)}
+                    >
+                      <div className="partner-avatar-small">
+                        {(partner.name || "P").charAt(0).toUpperCase()}
+                      </div>
+
+                      <div className="connected-partner-info">
+                        <strong>{partner.name || "Partner"}</strong>
+                        <span>{partner.email}</span>
+                        <small>🎯 {partner.goal_title || "Accountability goal"}</small>
+                      </div>
+
+                      <div className="connected-partner-stats">
+                        <span className="connected-badge">● Connected</span>
+                        <strong>🔥 {partnerStreaks[partner.id] || 0}d</strong>
+                      </div>
+                    </button>
+                  );
+                })}
+
+                {filteredPartners.length === 0 && (
+                  <div className="partner-empty-goals">
+                    <h3>{search ? "No matching partners" : "No partners connected yet"}</h3>
+                    <p>
+                      {search
+                        ? "Try another name, email, or goal."
+                        : "Send a request below to connect with an accountability partner."}
+                    </p>
+                  </div>
+                )}
+              </div>
+            </section>
+
+            <section className="find-partner-card">
+              <div className="partner-section-title">
+                <span>PAIR UP</span>
+                <h2>Connect for a specific goal</h2>
+              </div>
+
+              <p className="partner-helper-text">
+                Choose one of your goals and enter the other user's ID.
+              </p>
+
+              <form className="find-partner-form" onSubmit={handleSendRequest}>
+                <label htmlFor="partner-goal-select">Your goal</label>
+                <select
+                  id="partner-goal-select"
+                  value={selectedGoalId}
+                  onChange={(event) => setSelectedGoalId(event.target.value)}
+                  required
+                >
+                  <option value="">Select your goal</option>
+                  {myGoals.map((goal) => (
+                    <option key={goal.id} value={goal.id}>
+                      {goal.title}
+                    </option>
+                  ))}
+                </select>
+
+                <label htmlFor="partner-user-id">Partner user ID</label>
+                <input
+                  id="partner-user-id"
+                  type="number"
+                  min="1"
+                  value={partnerUserId}
+                  onChange={(event) => setPartnerUserId(event.target.value)}
+                  placeholder="Enter partner user ID"
+                  required
+                />
+
+                <button type="submit" disabled={sendingRequest || !myGoals.length}>
+                  {sendingRequest ? "Sending request..." : "Send Request →"}
+                </button>
+
+                {!myGoals.length && (
+                  <small>Create a goal before sending a request.</small>
+                )}
+              </form>
+            </section>
+
+            <section className="partner-requests-card">
+              <div className="partner-section-title">
+                <span>INVITATIONS</span>
+                <h2>Incoming Requests ({partnerRequests.length})</h2>
+              </div>
+
+              {partnerRequests.length === 0 ? (
+                <div className="partner-empty-goals">
+                  <h3>No pending requests</h3>
+                  <p>New partner requests will appear here.</p>
+                </div>
+              ) : (
+                <div className="requests-list">
+                  {partnerRequests.map((item) => (
+                    <article className="partner-request" key={item.id}>
+                      <div className="request-avatar">
+                        {(item.name || "U").charAt(0).toUpperCase()}
+                      </div>
+
+                      <div className="request-info">
+                        <strong>{item.name || "User"}</strong>
+                        <span>{item.email || ""}</span>
+                        <small>🎯 {item.goal_title || "Goal request"}</small>
+                      </div>
+
+                      <div className="request-actions">
+                        <button
+                          type="button"
+                          className="accept-request-btn"
+                          disabled={Boolean(actionLoading)}
+                          onClick={() => handleRequestAction(item.id, "accept")}
+                        >
+                          {actionLoading === `${item.id}-accept` ? "..." : "Accept"}
+                        </button>
+                        <button
+                          type="button"
+                          className="reject-request-btn"
+                          disabled={Boolean(actionLoading)}
+                          onClick={() => handleRequestAction(item.id, "reject")}
+                        >
+                          {actionLoading === `${item.id}-reject` ? "..." : "Reject"}
+                        </button>
+                      </div>
+                    </article>
+                  ))}
+                </div>
+              )}
+            </section>
+
+            <section className="partner-quote-card">
+              <span className="quote-badge">A LITTLE REMINDER</span>
+              <p className="quote-text">
+                “You don't have to be perfect. You just have to keep showing up.”
+              </p>
+              <span className="quote-author">— Your Saathi reminder</span>
+            </section>
+          </div>
+
+          <div className="partner-right-col">
+            {selectedPartner ? (
+              <>
+                <section className="partner-profile-card">
+                  <div className="large-partner-avatar">
+                    {(selectedPartner.name || "P").charAt(0).toUpperCase()}
+                  </div>
+
+                  <div className="partner-info">
+                    <span className="online-badge">● Connected partner</span>
+                    <h2>{selectedPartner.name}</h2>
+                    <p>{selectedPartner.email}</p>
+                    <p>
+                      🎯 Accountability goal:{" "}
+                      <strong>{selectedPartner.goal_title || "Not specified"}</strong>
+                    </p>
+
+                    <div className="partner-stats">
+                      <div>
+                        <strong>{selectedGoalProgress}%</strong>
+                        <span>Goal progress</span>
+                      </div>
+                      <div>
+                        <strong>🔥 {partnerStreaks[selectedPartner.id] || 0}</strong>
+                        <span>Day streak</span>
+                      </div>
+                      <div>
+                        <strong>{partnerGoals.length}</strong>
+                        <span>Goals shared</span>
+                      </div>
+                    </div>
+                  </div>
+                </section>
+
+                <section className="partner-progress-card">
+                  <div className="partner-section-title">
+                    <span>PARTNER'S GOALS</span>
+                    <h2>Current Progress</h2>
+                  </div>
+
+                  {partnerGoals.length === 0 ? (
+                    <div className="partner-empty-goals">
+                      <h3>No goals available</h3>
+                      <p>Your partner has not created any goals yet.</p>
+                    </div>
+                  ) : (
+                    partnerGoals.map((goal) => {
+                      const progress = Math.min(
+                        100,
+                        Math.max(0, Number(goal.progress || 0))
+                      );
+
+                      return (
+                        <article className="partner-goal" key={goal.id}>
+                          <div className="partner-goal-copy">
+                            <h3>{goal.title}</h3>
+                            <p>{goal.description || "No description provided"}</p>
+                          </div>
+
+                          <strong>{progress}%</strong>
+
+                          <div
+                            className="partner-bar"
+                            role="progressbar"
+                            aria-valuenow={progress}
+                            aria-valuemin="0"
+                            aria-valuemax="100"
+                          >
+                            <div style={{ width: `${progress}%` }} />
+                          </div>
+
+                          {goal.deadline && (
+                            <small>Deadline: {goal.deadline}</small>
+                          )}
+                        </article>
+                      );
+                    })
+                  )}
+                </section>
+
+                <section className="message-card">
+                  <div className="partner-section-title">
+                    <span>STAY CONNECTED</span>
+                    <h2>Chat with {selectedPartner.name}</h2>
+                  </div>
+
+                  <div className="partner-messages" aria-live="polite">
+                    {messages.length === 0 ? (
+                      <p className="no-messages">
+                        No messages yet. Start the conversation!
+                      </p>
+                    ) : (
+                      messages.map((message) => (
+                        <div
+                          key={message.id}
+                          className={`message-bubble ${
+                            isOwnMessage(message) ? "sent" : "received"
+                          }`}
+                        >
+                          <p>{message.content}</p>
+                          <small>
+                            {message.created_at
+                              ? new Date(message.created_at).toLocaleString()
+                              : ""}
+                          </small>
+                        </div>
+                      ))
+                    )}
+                  </div>
+
+                  <form className="partner-chat-form" onSubmit={handleSendMessage}>
+                    <textarea
+                      value={messageText}
+                      onChange={(event) => setMessageText(event.target.value)}
+                      placeholder="Send some encouragement..."
+                      maxLength={1000}
+                      rows={3}
+                    />
+                    <button
+                      type="submit"
+                      disabled={sendingMessage || !messageText.trim()}
+                    >
+                      {sendingMessage ? "Sending..." : "Send Message →"}
+                    </button>
+                  </form>
+                </section>
+
+                <section className="encouragement-card">
+                  <span className="encouragement-icon">💛</span>
+                  <div>
+                    <h3>Keep each other accountable</h3>
+                    <p>
+                      Celebrate small wins, encourage consistency, and keep
+                      moving forward together.
+                    </p>
+                  </div>
+                </section>
+              </>
+            ) : (
+              <section className="partner-empty-selection">
+                <span>🤝</span>
+                <h2>Select a partner</h2>
+                <p>
+                  Choose a connected partner from the list to view their goals
+                  and chat.
+                </p>
+              </section>
+            )}
+          </div>
+        </div>
+      </main>
     </div>
   );
 }
